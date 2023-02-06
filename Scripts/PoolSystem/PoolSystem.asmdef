@@ -1,0 +1,17 @@
+{
+    "name": "PoolSystem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:fb9e5508dc746dc478d750d8cba7dd98",
+        "GUID:6860f13082b492b44874cf7c29e16165"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
