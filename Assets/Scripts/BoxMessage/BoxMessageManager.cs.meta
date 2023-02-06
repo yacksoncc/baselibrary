@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 0ebf12dbff6c3634da33d000125e175e
+timeCreated: 1507955940
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - prefabMessageInfo: {fileID: 1157218163988182, guid: ac8729815891d3f48ab4d678a9eb7952,
+      type: 2}
+  - prefabMessageDecision: {fileID: 1537300889417180, guid: 7f83ac41593170d4689bea9410b1f212,
+      type: 2}
+  - prefabMessageMini: {fileID: 1959391339473206, guid: 0c6f8cd7841c1ee40986247b502bbc64,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

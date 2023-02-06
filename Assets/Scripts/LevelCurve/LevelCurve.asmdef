@@ -1,0 +1,16 @@
+{
+    "name": "LevelCurve",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b8c1e7c0210f078458deffd8bc1282ca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
