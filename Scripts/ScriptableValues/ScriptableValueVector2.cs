@@ -1,15 +1,11 @@
-#pragma warning disable 0660
-#pragma warning disable 0661
 using UnityEngine;
 
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
-    [CreateAssetMenu(fileName = "ScriptableValueVector2", menuName = "NSScriptableValue/ScriptableValueVector2", order = 0)]
+    [CreateAssetMenu(fileName = "svVector2", menuName = "ScriptableValue/Vector2", order = 0)]
     public class ScriptableValueVector2 : AbstractScriptableValue<Vector2>
     {
-        #region sobre carga operadores
-        
         public static implicit operator ScriptableValueVector2(Vector2 argScriptableValueA)
         {
             var tmpNewScriptableValue = CreateInstance<ScriptableValueVector2>();
@@ -21,6 +17,5 @@ namespace NSScriptableValues
         {
             return argScriptableValueA.value;
         }
-        #endregion
     }
 }

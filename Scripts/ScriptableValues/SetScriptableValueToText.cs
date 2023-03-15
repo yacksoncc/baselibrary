@@ -1,9 +1,7 @@
-#pragma warning disable 0649
-using NSScriptableValues;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
     public class SetScriptableValueToText : MonoBehaviour
     {

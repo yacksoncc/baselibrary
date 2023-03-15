@@ -1,13 +1,10 @@
 using UnityEngine;
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
-    [CreateAssetMenu(fileName = "ScriptableValueString", menuName = "NSScriptableValue/ScriptableValueString", order = 0)]
+    [CreateAssetMenu(fileName = "svString", menuName = "ScriptableValue/String", order = 0)]
     public class ScriptableValueString : AbstractScriptableValue<string>
     {
-        #region sobre carga operadores
-        //initialization
-
         public static implicit operator ScriptableValueString(string argScriptableValueA)
         {
             var tmpNewScriptableValue = CreateInstance<ScriptableValueString>();
@@ -19,6 +16,5 @@ namespace NSScriptableValues
         {
             return argScriptableValueA.value;
         }
-        #endregion
     }
 }

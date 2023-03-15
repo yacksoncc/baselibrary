@@ -56,7 +56,7 @@ namespace BoxMessage
          boxMessageDesicionActual = Instantiate(prefabMessageDecision, canvas);
          boxMessageDesicionActual.SetActive(false);
          var tmpBoxMessage = boxMessageDesicionActual.GetComponent<BoxMessageDecision>();
-         tmpBoxMessage.ShowPanel();
+         tmpBoxMessage.OpenPanel();
          tmpBoxMessage.TextMessage = argTextMessage;
          tmpBoxMessage.TextButtonAccept = argTextButtonAccept;
          tmpBoxMessage.TextButtonCancel = argTextButtonCancel;
@@ -79,7 +79,7 @@ namespace BoxMessage
          boxMessageInfoActual = Instantiate(prefabMessageInfo, canvas);
          boxMessageInfoActual.SetActive(false);
          var tmpBoxMessage = boxMessageInfoActual.GetComponent<BoxMessageInfo>();
-         tmpBoxMessage.ShowPanel();
+         tmpBoxMessage.OpenPanel();
          tmpBoxMessage.TextMessage = argTextMessage;
          tmpBoxMessage.TextButtonAccept = argTextButtonAccept;
          tmpBoxMessage.AddDelegateButtonAccept(argFunctionExeAccept ?? delegate { });
@@ -99,7 +99,7 @@ namespace BoxMessage
          boxMessageMiniActual = Instantiate(prefabMessageMini, canvas);
          boxMessageMiniActual.SetActive(false);
          var tmpBoxMessage = boxMessageMiniActual.GetComponent<BoxMessageMini>();
-         tmpBoxMessage.ShowPanel();
+         tmpBoxMessage.OpenPanel();
          tmpBoxMessage.TextMessage = argTextMessage;
          tmpBoxMessage.HiddeWithDelaySeconds = argTimeDestroy;
          tmpBoxMessage.AddDelegateButtonAccept(argFunctionExeAccept ?? delegate { });

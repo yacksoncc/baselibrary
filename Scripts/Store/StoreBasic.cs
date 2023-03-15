@@ -1,14 +1,13 @@
-﻿#pragma warning disable
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Store
 {
-   public class BaseStore : AbstractStore
+   public class StoreBasic : AbstractStore
    {
       [SerializeField]
-      private BaseInventory refBaseInventory;
+      private InventoryBasic refInventoryBasic;
 
-      public void ComprarObjetoTienda(OrderTrading argOrderTrading)
+      public void BoughtStoreObject(OrderTrading argOrderTrading)
       {
          var tmpSoLotFinded = listSoLots.Find(argLoteObjeto => argLoteObjeto.RefSoTradeableObject == argOrderTrading.refSoTradeableObject);
 
@@ -20,10 +19,10 @@ namespace Store
             if(tmpSoLotFinded.ThereIsQuantity(tmpQuantity) && tmpSoTradeableObject.SoCoinForBuyThisTradeableObject.ConsumeThisQuantityOnlyIfThereIsEnough(tmpSoTradeableObject.Price * tmpQuantity))
             {
                tmpSoLotFinded.RemoveQuantity(tmpQuantity);
-               refBaseInventory.AddTradingOrder(argOrderTrading);
+               refInventoryBasic.AddTradingOrder(argOrderTrading);
             }
             else
-               Debug.Log("No se pudo tradear objeto");
+               Debug.Log("Can't bought object");
          }
       }
    }

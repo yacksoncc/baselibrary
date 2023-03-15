@@ -11,10 +11,7 @@ namespace Stages
 
       protected bool HasStage(Enum argStageForEvaluating)
       {
-         if(actualStage == null)
-            return false;
-
-         return actualStage.HasFlag(argStageForEvaluating);
+         return actualStage is not null && actualStage.HasFlag(argStageForEvaluating);
       }
 
       public bool HasStageAnd(params Enum[] argStagesForEvaluating)
@@ -39,7 +36,7 @@ namespace Stages
 
       public void AddStage(Enum argNewStage)
       {
-         if(actualStage != null)
+         if(actualStage is not null)
             ActualStage = (Enum)Enum.ToObject(actualStage.GetType(), Convert.ToUInt64(actualStage) | Convert.ToUInt64(argNewStage));
          else
             ActualStage = argNewStage;
@@ -47,7 +44,7 @@ namespace Stages
 
       public void AddStage(params Enum[] argNewStages)
       {
-         if(actualStage != null)
+         if(actualStage is not null)
          {
             var tmpActualStages = actualStage;
 
@@ -93,14 +90,10 @@ namespace Stages
       {
          ActualStage = argNewStage;
       }
-
-      /// <summary>
-      /// Si tiene el stage lo quita, si no lo tiene lo pone
-      /// </summary>
-      /// <param name="argStage">Stage para cambiar el estado</param>
+      
       public void ToggleStage(Enum argStage)
       {
-         if(actualStage == null)
+         if(actualStage is null)
             ActualStage = argStage;
          else
             ActualStage = (Enum)Enum.ToObject(actualStage.GetType(), Convert.ToUInt64(actualStage) ^ Convert.ToUInt64(argStage));

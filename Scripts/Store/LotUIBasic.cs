@@ -1,21 +1,19 @@
 ﻿using UnityEngine;
 
-#pragma warning disable
-
 namespace Store
 {
-   public class LotUIBasico : AbstractLotUI
+   public class LotUIBasic : AbstractLotUI
    {
       [SerializeField]
-      private string tagAlmacenLotesParaTradear;
+      private string tagStore;
 
       private AbstractStore refStore;
 
-      protected int cantidadObjetosTradear = 1;
+      private int cantidadObjetosTradear = 1;
 
       private void Awake()
       {
-         refStore = GameObject.FindWithTag(tagAlmacenLotesParaTradear).GetComponent<AbstractStore>();
+         refStore = GameObject.FindWithTag(tagStore).GetComponent<AbstractStore>();
       }
 
       public override void ButtonExecuteTrade()
@@ -26,10 +24,7 @@ namespace Store
                                   refSoTradeableObject = RefSoLot.RefSoTradeableObject
                                };
 
-         if(RefAbstractStoreOwner.TradeLotFromThisStoreToOtherStore(tmpOrdenTrading, refStore))
-            Debug.Log("ObjetoComprado");
-         else
-            Debug.Log("Objeto no se pudo comprar");
+         Debug.Log(refAbstractStoreOwner.TradeLotFromThisStoreToOtherStore(tmpOrdenTrading, refStore)? "Object Bought" : "Object can't be Bought");
       }
    }
 }

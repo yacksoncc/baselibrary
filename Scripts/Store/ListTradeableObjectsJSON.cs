@@ -15,7 +15,7 @@ namespace Store
 
       public void AddTradeableObject(AbstractSOTradeableObject argTradeableObject)
       {
-         listTradeableObjects.Add(argTradeableObject.ID);
+         listTradeableObjects.Add(argTradeableObject.TradeableObjectId);
       }
    }
 }

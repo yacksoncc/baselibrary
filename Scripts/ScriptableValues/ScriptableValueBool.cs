@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
-    [CreateAssetMenu(fileName = "ScriptableValueBool", menuName = "NSScriptableValue/ScriptableValueBool", order = 0)]
+    [CreateAssetMenu(fileName = "svBool", menuName = "ScriptableValue/Bool", order = 0)]
     public class ScriptableValueBool : AbstractScriptableValue<bool>
     {
-        #region sobre carga operadores
-
         public static implicit operator ScriptableValueBool(bool argScriptableValueA)
         {
             var tmpNewScriptableValue = CreateInstance<ScriptableValueBool>();
@@ -18,6 +16,5 @@ namespace NSScriptableValues
         {
             return argScriptableValueA.value;
         }
-        #endregion
     }
 }

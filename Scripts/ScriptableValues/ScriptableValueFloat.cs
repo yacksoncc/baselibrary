@@ -3,12 +3,11 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
-    [CreateAssetMenu(fileName = "ScriptableValueFloat", menuName = "NSScriptableValue/ScriptableValueFloat", order = 0)]
+    [CreateAssetMenu(fileName = "svFloat", menuName = "ScriptableValue/Float", order = 0)]
     public class ScriptableValueFloat : AbstractScriptableValue<float>
     {
-        #region sobre carga operadores
 /*
         //initialization
         public static implicit operator ScriptableValueFloat(float argScriptableValueA)
@@ -126,6 +125,5 @@ namespace NSScriptableValues
         {
             return argScriptableValueA.value <= argScriptableValueB.value;
         }
-        #endregion
     }
 }

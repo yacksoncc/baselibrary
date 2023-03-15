@@ -127,7 +127,7 @@ namespace BoxMessage
       {
          yield return new WaitForSeconds(argTimeForDestroy);
          OnButtonAccept();
-         ShowPanel(false, true);
+         ClosePanelAndDestroyIt();
       }
    }
 }

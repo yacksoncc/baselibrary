@@ -2,10 +2,7 @@
 
 namespace Store
 {
-   /// <summary>
-   /// inventario base de un usuario
-   /// </summary>
-   public class BaseInventory : AbstractStore
+   public class InventoryBasic : AbstractStore
    {
       [SerializeField]
       private SaveStore refSaveStore;
@@ -21,8 +18,7 @@ namespace Store
       private void OnEnable()
       {
          refLoadStore.RefAbstractStore = this;
-         refLoadStore.CargarFromPlayersPrefs();
+         refLoadStore.LoadFromPlayersPrefs();
       }
-      
    }
 }
