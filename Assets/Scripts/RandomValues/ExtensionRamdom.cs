@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Extensions
+namespace RandomValues
 {
    public class ExtensionRamdom : MonoBehaviour
    {

@@ -1,11 +1,7 @@
 {
-    "name": "NSAvancedUI",
+    "name": "RandomValues",
     "rootNamespace": "",
     "references": [
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:fb9e5508dc746dc478d750d8cba7dd98",
-        "GUID:c2dc3f2c13dc16a489a9edb022fe7c4f",
-        "GUID:b8c1e7c0210f078458deffd8bc1282ca",
         "GUID:d8b63aba1907145bea998dd612889d6b"
     ],
     "includePlatforms": [],

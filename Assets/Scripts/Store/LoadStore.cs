@@ -5,7 +5,7 @@ namespace Store
    public class LoadStore : MonoBehaviour
    {
       [SerializeField]
-      private AbstractStore[] arrayAlmacenLotesForLoad;
+      private AbstractStore[] arrayStoresForLoad;
 
       [SerializeField]
       private AbstractStore refAbstractStore;
@@ -17,17 +17,16 @@ namespace Store
 
       private void Start()
       {
-         CargarFromPlayersPrefs();
+         LoadFromPlayersPrefs();
       }
 
-      public void CargarFromPlayersPrefs()
+      public void LoadFromPlayersPrefs()
       {
          var tmpJSONLoad = PlayerPrefs.GetString(refAbstractStore.StoreID, "{\"listObjetosTradeables\":[]}");
-         var tmpListTradeableObjectsJSON = JsonUtility.FromJson<ListTradeableObjectsJSON>(tmpJSONLoad);
-         LoadTradeableObjectsFromList(tmpListTradeableObjectsJSON);
+         LoadFromJSON(tmpJSONLoad);
       }
 
-      public void CargarFromJSON(string argJSON)
+      public void LoadFromJSON(string argJSON)
       {
          var tmpListObjetosTradeablesJson = JsonUtility.FromJson<ListTradeableObjectsJSON>(argJSON);
          LoadTradeableObjectsFromList(tmpListObjetosTradeablesJson);
@@ -36,9 +35,9 @@ namespace Store
       private void LoadTradeableObjectsFromList(ListTradeableObjectsJSON argListTradeableObjectsJSON)
       {
          foreach(var tmpIdTradeableObject in argListTradeableObjectsJSON.ListTradeableObjects)
-            foreach(var tmpStore in arrayAlmacenLotesForLoad)
+            foreach(var tmpStore in arrayStoresForLoad)
                foreach(var tmpSoLot in tmpStore.GetAllLotsAvaiblesOnStore())
-                  if(tmpIdTradeableObject == tmpSoLot.RefSoTradeableObject.ID)
+                  if(tmpIdTradeableObject == tmpSoLot.RefSoTradeableObject.TradeableObjectId)
                      refAbstractStore.AddNewTradeableObject(tmpSoLot.RefSoTradeableObject, 1);
       }
    }

@@ -1,58 +1,77 @@
-﻿#pragma warning disable
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Store
 {
    /// <summary>
-   /// Moneda para poder tradear objetos entre almacenes de objetos
+   /// Coin to trade objects between stores
    /// </summary>
-   [CreateAssetMenu(fileName = "Moneda", menuName = "Tienda/Moneda", order = 0)]
+   [CreateAssetMenu(fileName = "soCoin", menuName = "Store/soCoin", order = 0)]
    public class SOCoin : ScriptableObject
    {
       [SerializeField]
-      private Sprite icono;
+      private Sprite icon;
 
       [SerializeField]
-      private string nombre;
+      private string coinName;
 
-      public string Nombre
-         => nombre;
+      [SerializeField, HideInInspector]
+      private string coinId;
 
-      public int Cantidad
+      public string CoinName
+         => coinName;
+
+      public string CoinId
       {
          get
          {
-            return PlayerPrefs.GetInt("Moneda" + nombre, 0);
+            GenerateNewID();
+            return coinId;
+         }
+      }
+
+      public int Quantity
+      {
+         get
+         {
+            return PlayerPrefs.GetInt(coinId, 0);
          }
          set
          {
-            PlayerPrefs.SetInt("Moneda" + nombre, value);
+            PlayerPrefs.SetInt(coinId, value);
          }
       }
 
-      public bool HayEstaCantidad(int argCantidad)
+      public bool ThereIsThisQuantity(int argQuantity)
       {
-         return (Cantidad - argCantidad) >= 0;
+         return (Quantity - argQuantity) >= 0;
       }
 
-      public void GastarEstaCantidad(int argCantidad)
+      public void SpentThisQuantity(int argQuantity)
       {
-         Cantidad -= argCantidad;
-         Debug.Log("Cantidad nueva de dinero : " + Cantidad + " cantidad gastada " + argCantidad);
+         Quantity -= argQuantity;
       }
 
-      public bool ConsumeThisQuantityOnlyIfThereIsEnough(int argCantidad)
+      public bool ConsumeThisQuantityOnlyIfThereIsEnough(int argQuantity)
       {
-         if(!HayEstaCantidad(argCantidad))
+         if(!ThereIsThisQuantity(argQuantity))
             return false;
 
-         GastarEstaCantidad(argCantidad);
+         SpentThisQuantity(argQuantity);
          return true;
       }
 
-      public void AgregarEstaCantidad(int argCantidad)
+      public void AddThisQuantity(int argQuantity)
       {
-         Cantidad += argCantidad;
+         Quantity += argQuantity;
+      }
+
+      private void GenerateNewID()
+      {
+         GUIDGeneretor.GenerateNewID(ref coinId);
+#if UNITY_EDITOR
+         EditorUtility.SetDirty(this);
+#endif
       }
    }
 }

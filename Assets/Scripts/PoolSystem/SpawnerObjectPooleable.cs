@@ -10,7 +10,7 @@ namespace PoolSystem
       private GameObject prefabObjectPooleable;
 
       [SerializeField]
-      private float intervalForSpawnEachObjectInSeconds;
+      private float intervalForSpawnEachObjectInSeconds = 1;
 
       [SerializeField]
       private int maxQuantityObjectsCanBeSpawned;

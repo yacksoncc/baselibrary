@@ -3,16 +3,14 @@
 namespace Store
 {
    /// <summary>
-   ///    Los lotes son usados para contener cantidades de un objeto, por ejemplo una tienda puede tener lotes de objetos, de donde el usuario comprar
+   /// Lot must be used to store quantity of soTradeableObject
    /// </summary>
-   [CreateAssetMenu(fileName = "SOLoteObjeto", menuName = "Tienda/Lote Objeto", order = 0)]
+   [CreateAssetMenu(fileName = "soLot", menuName = "Store/soLot", order = 0)]
    public class SOLot : ScriptableObject
    {
-      [Header("Referencia objeto")]
       [SerializeField]
       private AbstractSOTradeableObject refSoTradeableObject;
 
-      [Header("Cantidad objeto"), Tooltip("When this lot trade with other lot, lose quantity objects traded?")]
       [SerializeField]
       private bool consumeQuantityWhenTrade;
 

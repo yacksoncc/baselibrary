@@ -1,11 +1,10 @@
-﻿#pragma warning disable
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Store
 {
    /// <summary>
-   /// Clase base para crear los objetos de un almacen, en la UI
+   /// Base class to show Store in UI
    /// </summary>
    public abstract class AbstractStoreUI : MonoBehaviour
    {

@@ -1,16 +1,12 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Store
 {
-   /// <summary>
-   /// Base class for represent a tradeable object
-   /// </summary>
    public abstract class AbstractSOTradeableObject : ScriptableObject
    {
-      [SerializeField]
-      private string id;
+      [SerializeField, HideInInspector]
+      private string tradeableObjectId;
 
       [SerializeField]
       private string objectName;
@@ -36,25 +32,19 @@ namespace Store
       public SOCoin SoCoinForBuyThisTradeableObject
          => soCoinForBuyThisTradeableObject;
 
-      public string ID
-         => id;
+      public string TradeableObjectId
+         => tradeableObjectId;
 
       private void OnEnable()
       {
          GenerateNewID();
       }
 
-      [ContextMenu("GenerateNewID")]
       private void GenerateNewID()
       {
+         GUIDGeneretor.GenerateNewID(ref tradeableObjectId);
 #if UNITY_EDITOR
-         if(id == "")
-         {
-            var tmpNewID = Guid.NewGuid().ToString();
-            var tmpArraySplit = tmpNewID.Split('-');
-            id = tmpArraySplit[0];
-            EditorUtility.SetDirty(this);
-         }
+         EditorUtility.SetDirty(this);
 #endif
       }
    }

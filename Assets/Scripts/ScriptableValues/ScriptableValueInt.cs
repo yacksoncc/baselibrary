@@ -1,13 +1,10 @@
-#pragma warning disable 0660
-#pragma warning disable 0661
 using UnityEngine;
 
-namespace NSScriptableValues
+namespace ScriptableValues
 {
-    [CreateAssetMenu(fileName = "ScriptableValueInt", menuName = "NSScriptableValue/Int", order = 0)]
+    [CreateAssetMenu(fileName = "svInt", menuName = "ScriptableValue/Int", order = 0)]
     public class ScriptableValueInt : AbstractScriptableValue<int>
     {
-        #region sobre carga operadores
         /*
         //initialization
 
@@ -126,6 +123,5 @@ namespace NSScriptableValues
         {
             return argScriptableValueA.value <= argScriptableValueB.value;
         }
-        #endregion
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AvancedUI
 {
-    [CreateAssetMenu(menuName = "Panel Interfaz/Animations Curve")]
+    [CreateAssetMenu(fileName = "SOAnimationsCurvePanelUI", menuName = "PanelUI/SOAnimationsCurvePanelUI")]
     public class SOAnimationsCurvePanelUI : ScriptableObject
     {
         /// <summary>

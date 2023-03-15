@@ -1,6 +1,4 @@
-﻿#pragma warning disable
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,18 +9,19 @@ namespace Store
    /// </summary>
    public abstract class AbstractStore : MonoBehaviour
    {
-      [SerializeField]
+      [SerializeField, HideInInspector]
       private string storeID;
 
       [SerializeField]
       protected List<SOLot> listSoLots;
 
       public string StoreID
-         => storeID;
-
-      private void OnEnable()
       {
-         GenerateNewID();
+         get
+         {
+            GenerateNewID();
+            return storeID;
+         }
       }
 
       public List<SOLot> GetAllLotsAvaiblesOnStore()
@@ -99,17 +98,11 @@ namespace Store
          return listSoLots.Contains(argSoLot);
       }
 
-      [ContextMenu("GenerateNewID")]
       private void GenerateNewID()
       {
+         GUIDGeneretor.GenerateNewID(ref storeID);
 #if UNITY_EDITOR
-         if(storeID == "")
-         {
-            var tmpNewID = Guid.NewGuid().ToString();
-            var tmpArraySplit = tmpNewID.Split('-');
-            storeID = tmpArraySplit[0];
-            EditorUtility.SetDirty(this);
-         }
+         EditorUtility.SetDirty(this);
 #endif
       }
    }

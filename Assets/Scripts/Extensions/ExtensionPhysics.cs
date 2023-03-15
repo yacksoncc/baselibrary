@@ -9,7 +9,7 @@ namespace Extensions
       {
          var tmpArrayCollisionWhitOtherObjects = Physics.OverlapSphere(argPosition, argRadius, argLayerMask);
          var tmpListComponentsFindedWithCollision = new List<T>();
-         
+
          foreach(var tmpCollider in tmpArrayCollisionWhitOtherObjects)
          {
             if(argGameObjectForIgnore != null && tmpCollider.gameObject == argGameObjectForIgnore)
@@ -21,12 +21,12 @@ namespace Extensions
 
          return tmpListComponentsFindedWithCollision;
       }
-      
+
       public static List<T> OverlapBoxGetComponent<T>(Vector3 argPosition, Vector3 argHalfExtensions, Quaternion argRotation, LayerMask argLayerMask, GameObject argGameObjectForIgnore = null)
       {
-         var tmpArrayCollisionWhitOtherObjects = Physics.OverlapBox(argPosition, argHalfExtensions, argRotation,  argLayerMask);
+         var tmpArrayCollisionWhitOtherObjects = Physics.OverlapBox(argPosition, argHalfExtensions, argRotation, argLayerMask);
          var tmpListComponentsFindedWithCollision = new List<T>();
-         
+
          foreach(var tmpCollider in tmpArrayCollisionWhitOtherObjects)
          {
             if(argGameObjectForIgnore != null && tmpCollider.gameObject == argGameObjectForIgnore)
