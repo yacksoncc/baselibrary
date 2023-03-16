@@ -58,6 +58,11 @@ namespace RandomValues
                DrawLineXCell(x * tmpCellLenghtX - boundsPerlinNoise.extents[0], z * tmpCellLenghtZ - boundsPerlinNoise.extents[2], tmpCellLenghtX);
                DrawLineZCell(x * tmpCellLenghtX - boundsPerlinNoise.extents[0], z * tmpCellLenghtZ - boundsPerlinNoise.extents[2], tmpCellLenghtZ);
             }
+
+         var tmpInitPosition = new float3(0, EvaluatePerlinNoise(0, 0, WorldSpace), 0);
+         var tmpNormal = EvaluateNormalPerlinNoise(0, 0, WorldSpace);
+         Gizmos.color = Color.green;
+         Gizmos.DrawLine(tmpInitPosition, tmpInitPosition + tmpNormal);
       }
 
       /*private void DrawCell(float argPosX, float argPosZ)
@@ -104,6 +109,15 @@ namespace RandomValues
 
          tmpPosition += new Vector3(valueXOffset, 0, valueZOffset);
          return (Mathf.PerlinNoise(tmpPosition[0], tmpPosition[2])) * boundsPerlinNoise.size[1];
+      }
+
+      public float3 EvaluateNormalPerlinNoise(float argPosX, float argPosZ, bool argTransformFromLocalToWorld = false)
+      {
+         var tmpPrecision = 0.005f;
+         var tmpInitVector = new float3(0, EvaluatePerlinNoise(argPosX, argPosZ, argTransformFromLocalToWorld), 0);
+         var tmpVectorX = new float3(tmpPrecision, EvaluatePerlinNoise(argPosX + tmpPrecision, argPosZ, argTransformFromLocalToWorld), 0) - tmpInitVector;
+         var tmpVectorZ = new float3(0, EvaluatePerlinNoise(argPosX, argPosZ + tmpPrecision, argTransformFromLocalToWorld), tmpPrecision) - tmpInitVector;
+         return math.normalize(math.cross(tmpVectorZ, tmpVectorX));
       }
    }
 }
