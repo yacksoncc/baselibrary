@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Time
+namespace TimeManage
 {
    [Serializable]
    public class TimerCounter
