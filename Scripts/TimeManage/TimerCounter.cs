@@ -28,31 +28,31 @@ namespace TimeManage
          actualTime = time;
       }
 
-      public void FixedUpdate()
+      public void FixedUpdate(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.fixedDeltaTime;
+         actualTime += argValue * Time.fixedDeltaTime;
       }
 
-      public void Update()
+      public void Update(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.deltaTime;
+         actualTime = argValue + Time.deltaTime;
       }
 
-      public bool CheckIfIntervalFinishFixedUpdate()
+      public bool CheckIfTimeIsZeroFixedUpdate(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.fixedDeltaTime;
+         actualTime += argValue * Time.fixedDeltaTime;
          return actualTime <= 0;
       }
 
-      public bool CheckIfIntervalFinishUpdate()
+      public bool CheckIfTimeIsZeroUpdate(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.deltaTime;
+         actualTime += argValue * Time.deltaTime;
          return actualTime <= 0;
       }
 
-      public bool CheckIfIntervalAndResetFinishFixedUpdate()
+      public bool CheckIfTimeIsZeroAndResetFinishFixedUpdate(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.fixedDeltaTime;
+         actualTime += argValue * Time.fixedDeltaTime;
 
          if(actualTime <= 0)
          {
@@ -63,9 +63,9 @@ namespace TimeManage
          return false;
       }
 
-      public bool CheckIfIntervalAndResetFinishUpdate()
+      public bool CheckIfTimeIsZeroAndResetFinishUpdate(float argValue = -1f)
       {
-         actualTime -= UnityEngine.Time.deltaTime;
+         actualTime += argValue * Time.deltaTime;
 
          if(actualTime <= 0)
          {
@@ -74,6 +74,11 @@ namespace TimeManage
          }
 
          return false;
+      }
+
+      public bool CheckIfTimeIsZero()
+      {
+         return actualTime <= 0;
       }
 
       public float GetFactor()
