@@ -18,6 +18,11 @@ namespace TimeManage
          set => actualTime = value;
       }
 
+      public float TimeNormalized
+      {
+         get => actualTime / time;
+      }
+
       public TimerCounter(float argTime)
       {
          time = argTime;
@@ -35,26 +40,26 @@ namespace TimeManage
 
       public void Update(float argValue = -1f)
       {
-         actualTime = argValue + Time.deltaTime;
+         actualTime += argValue * Time.deltaTime;
       }
 
-      public bool CheckIfTimeIsZeroFixedUpdate(float argValue = -1f)
+      public bool CheckIfTimeIsZeroInFixedUpdate(float argValue = -1f)
       {
          actualTime += argValue * Time.fixedDeltaTime;
          return actualTime <= 0;
       }
 
-      public bool CheckIfTimeIsZeroUpdate(float argValue = -1f)
+      public bool CheckIfTimeIsZeroInUpdate(float argValue = -1f)
       {
          actualTime += argValue * Time.deltaTime;
          return actualTime <= 0;
       }
 
-      public bool CheckIfTimeIsZeroAndResetFinishFixedUpdate(float argValue = -1f)
+      public bool CheckIfTimeIsZeroAndResetInFixedUpdate(float argValue = -1f)
       {
          actualTime += argValue * Time.fixedDeltaTime;
 
-         if(actualTime <= 0)
+         if(CheckIfTimeIsZero())
          {
             Reset();
             return true;
@@ -63,11 +68,11 @@ namespace TimeManage
          return false;
       }
 
-      public bool CheckIfTimeIsZeroAndResetFinishUpdate(float argValue = -1f)
+      public bool CheckIfTimeIsZeroAndResetInUpdate(float argValue = -1f)
       {
          actualTime += argValue * Time.deltaTime;
 
-         if(actualTime <= 0)
+         if(CheckIfTimeIsZero())
          {
             Reset();
             return true;
@@ -79,11 +84,6 @@ namespace TimeManage
       public bool CheckIfTimeIsZero()
       {
          return actualTime <= 0;
-      }
-
-      public float GetFactor()
-      {
-         return actualTime / time;
       }
    }
 }
