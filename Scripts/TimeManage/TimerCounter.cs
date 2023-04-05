@@ -33,42 +33,18 @@ namespace TimeManage
          actualTime = time;
       }
 
-      public void FixedUpdate(float argValue = -1f)
-      {
-         actualTime += argValue * Time.fixedDeltaTime;
-      }
-
       public void Update(float argValue = -1f)
       {
          actualTime += argValue * Time.deltaTime;
       }
 
-      public bool CheckIfTimeIsZeroInFixedUpdate(float argValue = -1f)
-      {
-         actualTime += argValue * Time.fixedDeltaTime;
-         return actualTime <= 0;
-      }
-
-      public bool CheckIfTimeIsZeroInUpdate(float argValue = -1f)
+      public bool UpdateAndCheckIfTimeIsZero(float argValue = -1f)
       {
          actualTime += argValue * Time.deltaTime;
          return actualTime <= 0;
       }
 
-      public bool CheckIfTimeIsZeroAndResetInFixedUpdate(float argValue = -1f)
-      {
-         actualTime += argValue * Time.fixedDeltaTime;
-
-         if(CheckIfTimeIsZero())
-         {
-            Reset();
-            return true;
-         }
-
-         return false;
-      }
-
-      public bool CheckIfTimeIsZeroAndResetInUpdate(float argValue = -1f)
+      public bool UpdateAndCheckIfTimeIsZeroAndReset(float argValue = -1f)
       {
          actualTime += argValue * Time.deltaTime;
 
