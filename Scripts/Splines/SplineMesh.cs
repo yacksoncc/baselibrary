@@ -32,6 +32,14 @@ namespace Splines
       [SerializeField]
       private bool debug;
 
+      public float SplineLenghtInDistanceUnits
+      {
+         get
+         {
+            return refCinemachineSmoothPath.PathLength;
+         }
+      }
+
       private void Awake()
       {
          FillSamplePositions();
@@ -185,7 +193,7 @@ namespace Splines
       {
          return refCinemachineSmoothPath.EvaluateOrientationAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance) * argDirection;
       }
-      
+
       public Quaternion GetOrientationAtDistance(float argDistance)
       {
          return refCinemachineSmoothPath.EvaluateOrientationAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance);
