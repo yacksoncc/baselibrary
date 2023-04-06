@@ -36,10 +36,20 @@ namespace Splines
          set => sidePosition = value;
       }
 
+      public SplineMesh RefSplineMesh
+      {
+         set
+         {
+            refSplineMesh = value;
+            RebuilMesh();
+         }
+      }
+
       private void Awake()
       {
          refRenderer = GetComponent<MeshFilter>();
          arrayVertex = refRenderer.mesh.vertices;
+         RebuilMesh();
       }
 
       private void Update()
@@ -54,6 +64,9 @@ namespace Splines
 
       private void RebuilMesh()
       {
+         if(!refSplineMesh)
+            return;
+
          transform.position = refSplineMesh.GetPositionAtDistance(distanceOnSpline) + refSplineMesh.GetOrientationAtDistance(distanceOnSpline) * Vector3.right * sidePosition;
          var tmpVertices = new List<Vector3>(arrayVertex);
 
