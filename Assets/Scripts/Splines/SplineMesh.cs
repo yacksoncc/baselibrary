@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-namespace BezierCurve
+namespace Splines
 {
    [RequireComponent(typeof(CinemachineSmoothPath))]
    public class SplineMesh : MonoBehaviour
    {
+      [Tooltip("CinemachineSmoothPath component to get position and rotation")]
       [SerializeField]
       private CinemachineSmoothPath refCinemachineSmoothPath;
 
+      [Tooltip("Mesh to fill spline along curvature")]
       [SerializeField]
       private Mesh meshToFillSpline;
 
+      [Tooltip("Material for all mesh along spline")]
       [SerializeField]
       private Material materialSpline;
 
+      [Tooltip("Quantity of subdivided chunks")]
       [SerializeField]
       private int quantitySubdividedMeshs = 1;
 
@@ -112,7 +116,6 @@ namespace BezierCurve
 
             tmpListUVs.Clear();
             tmpListUVs = null;
-            arraySamplePosition = null;
          }
       }
 
@@ -171,6 +174,21 @@ namespace BezierCurve
             var tmpBounds = tmpMeshRender.bounds;
             Gizmos.DrawWireCube(tmpBounds.center, tmpBounds.size);
          }
+      }
+
+      public Vector3 GetPositionAtDistance(float argDistance)
+      {
+         return refCinemachineSmoothPath.EvaluatePositionAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance);
+      }
+
+      public Vector3 GetDirecionAtDistance(float argDistance, Vector3 argDirection)
+      {
+         return refCinemachineSmoothPath.EvaluateOrientationAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance) * argDirection;
+      }
+      
+      public Quaternion GetOrientationAtDistance(float argDistance)
+      {
+         return refCinemachineSmoothPath.EvaluateOrientationAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance);
       }
    }
 
