@@ -28,16 +28,22 @@ namespace Splines
 
       public float DistanceOnSpline
       {
+         get => distanceOnSpline;
          set => distanceOnSpline = value;
       }
 
       public float SidePosition
       {
+         get => sidePosition;
          set => sidePosition = value;
       }
 
       public SplineMesh RefSplineMesh
       {
+         get
+         {
+            return refSplineMesh;
+         }
          set
          {
             refSplineMesh = value;
