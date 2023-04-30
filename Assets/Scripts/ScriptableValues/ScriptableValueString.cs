@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ScriptableValues
 {
     [CreateAssetMenu(fileName = "svString", menuName = "ScriptableValue/String", order = 0)]
-    public class ScriptableValueString : AbstractScriptableValue<string>
+    public class ScriptableValueString : ScriptableValue<string>
     {
         public static implicit operator ScriptableValueString(string argScriptableValueA)
         {

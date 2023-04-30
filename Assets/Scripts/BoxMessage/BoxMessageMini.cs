@@ -1,8 +1,6 @@
-﻿
-
-namespace BoxMessage
+﻿namespace BoxMessage
 {
-    public class BoxMessageMini : AbstractBoxMessage
+    public class BoxMessageMini : BoxMessage
     {
         
     } 

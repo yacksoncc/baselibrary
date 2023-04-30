@@ -6,20 +6,20 @@ namespace ScriptableEvents
 {
     public class ScriptableEventListener : MonoBehaviour
     {
-        [SerializeField] private ScriptableEvent scriptableEvent;
+        [SerializeField] private ScriptableEventEmpty scriptableEventEmpty;
         
         public UnityEvent unityEvent;
 
         private void OnEnable()
         {
-            if (scriptableEvent)
-                scriptableEvent.Subscribe(unityEvent.Invoke);
+            if (scriptableEventEmpty)
+                scriptableEventEmpty.Subscribe(unityEvent.Invoke);
         }
 
         private void OnDisable()
         {
-            if (scriptableEvent)
-                scriptableEvent.Unsubscribe(unityEvent.Invoke);
+            if (scriptableEventEmpty)
+                scriptableEventEmpty.Unsubscribe(unityEvent.Invoke);
         }
     }
 }

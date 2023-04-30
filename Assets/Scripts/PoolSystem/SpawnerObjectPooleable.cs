@@ -1,6 +1,6 @@
 ﻿using System.Collections;
+using RandomPoints;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace PoolSystem
 {
@@ -16,16 +16,11 @@ namespace PoolSystem
       private int maxQuantityObjectsCanBeSpawned;
 
       [SerializeField]
-      private Bounds boundsForSpawnIn;
+      private RandomPoint randomPointForSpawnIn; // todo implement bounds random
 
       private void Start()
       {
          StartCoroutine(CouSpawn());
-      }
-
-      private void OnDrawGizmos()
-      {
-         Gizmos.DrawWireCube(transform.position, boundsForSpawnIn.extents * 2);
       }
 
       private IEnumerator CouSpawn()
@@ -33,11 +28,10 @@ namespace PoolSystem
          if(maxQuantityObjectsCanBeSpawned > 0)
          {
             var tmpActualQuantityObjectsSpawned = 0;
-            
+
             while(tmpActualQuantityObjectsSpawned < maxQuantityObjectsCanBeSpawned)
             {
-               var tmpRandomPosition = new Vector3(Random.Range(-boundsForSpawnIn.extents[0], boundsForSpawnIn.extents[0]), Random.Range(-boundsForSpawnIn.extents[1], boundsForSpawnIn.extents[1]), Random.Range(-boundsForSpawnIn.extents[2], boundsForSpawnIn.extents[2]));
-               Pool.Instance.InstantiateGameObjectPooleable(prefabObjectPooleable, transform.position + tmpRandomPosition, Quaternion.identity);
+               Pool.Instance.InstantiateGameObjectPooleable(prefabObjectPooleable, randomPointForSpawnIn.GetRamdomPoint(), Quaternion.identity);
                tmpActualQuantityObjectsSpawned++;
                yield return new WaitForSeconds(intervalForSpawnEachObjectInSeconds);
             }
@@ -45,8 +39,7 @@ namespace PoolSystem
          else
             while(true)
             {
-               var tmpRandomPosition = new Vector3(Random.Range(-boundsForSpawnIn.extents[0], boundsForSpawnIn.extents[0]), Random.Range(-boundsForSpawnIn.extents[1], boundsForSpawnIn.extents[1]), Random.Range(-boundsForSpawnIn.extents[2], boundsForSpawnIn.extents[2]));
-               Pool.Instance.InstantiateGameObjectPooleable(prefabObjectPooleable, transform.position + tmpRandomPosition, Quaternion.identity);
+               Pool.Instance.InstantiateGameObjectPooleable(prefabObjectPooleable, randomPointForSpawnIn.GetRamdomPoint(), Quaternion.identity);
                yield return new WaitForSeconds(intervalForSpawnEachObjectInSeconds);
             }
       }

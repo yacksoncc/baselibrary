@@ -3,7 +3,7 @@
 namespace ScriptableValues
 {
     [CreateAssetMenu(fileName = "svBool", menuName = "ScriptableValue/Bool", order = 0)]
-    public class ScriptableValueBool : AbstractScriptableValue<bool>
+    public class ScriptableValueBool : ScriptableValue<bool>
     {
         public static implicit operator ScriptableValueBool(bool argScriptableValueA)
         {

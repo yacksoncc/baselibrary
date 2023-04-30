@@ -1,10 +1,9 @@
-﻿#pragma warning disable 0649
-using Singleton;
+﻿using Singleton;
 using UnityEngine;
 
 namespace BoxMessage
 {
-   public class BoxMessageManager : AbstractSingleton<BoxMessageManager>
+   public class BoxMessageManager : Singleton<BoxMessageManager>
    {
       /// <summary>
       ///    Prefabricado del la caja de mensaje que muestra una informacion
@@ -48,7 +47,7 @@ namespace BoxMessage
       /// <param name="argTextButtonCancel">Texto que se colocara en el boton cancelar</param>
       /// <param name="argFunctionExeAccept">Funcion que se ejecutara si el usuario acepta</param>
       /// <param name="argFunctionExeCancel">Funcion que se ejecutara si el usuario cancela</param>
-      public AbstractBoxMessage CreateBoxMessageDecision(string argTextMessage, string argTextButtonCancel, string argTextButtonAccept, delegateOnBoxMessageButtonAccept argFunctionExeAccept = null, delegateOnBoxMessageButtonCancel argFunctionExeCancel = null)
+      public BoxMessage CreateBoxMessageDecision(string argTextMessage, string argTextButtonCancel, string argTextButtonAccept, delegateOnBoxMessageButtonAccept argFunctionExeAccept = null, delegateOnBoxMessageButtonCancel argFunctionExeCancel = null)
       {
          if(!canvas)
             canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
@@ -71,7 +70,7 @@ namespace BoxMessage
       /// <param name="argTextMessage">Mensaje que se mostrara</param>
       /// <param name="argTextButtonAccept">Texto del mensaje del boton aceptar, o ok</param>
       /// <param name="argFunctionExeAccept">Funcion que se ejecutara si el usuario acepta</param>
-      public AbstractBoxMessage CreateBoxMessageInfo(string argTextMessage, string argTextButtonAccept, delegateOnBoxMessageButtonAccept argFunctionExeAccept = null)
+      public BoxMessage CreateBoxMessageInfo(string argTextMessage, string argTextButtonAccept, delegateOnBoxMessageButtonAccept argFunctionExeAccept = null)
       {
          if(!canvas)
             canvas = GameObject.FindGameObjectWithTag("Canvas").transform;

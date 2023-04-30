@@ -2,7 +2,7 @@
 
 namespace LevelCurve
 {
-   public class TestLevelCurve : AbstractLevelCurve
+   public class TestLevelCurve : LevelCurve
    {
       protected override void Awake()
       {

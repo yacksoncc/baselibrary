@@ -9,7 +9,7 @@ namespace Store
    public class SOLot : ScriptableObject
    {
       [SerializeField]
-      private AbstractSOTradeableObject refSoTradeableObject;
+      private SOTradeableObject refSoTradeableObject;
 
       [SerializeField]
       private bool consumeQuantityWhenTrade;
@@ -23,10 +23,10 @@ namespace Store
       public int ActualQuantity
          => actualQuantity;
 
-      public bool LotHasQuantityAvaible
+      public bool HaveQuantityAvaible
          => actualQuantity > 0;
 
-      public AbstractSOTradeableObject RefSoTradeableObject
+      public SOTradeableObject RefSoTradeableObject
          => refSoTradeableObject;
 
       public int PriceTradeableObject
@@ -55,8 +55,13 @@ namespace Store
       {
          actualQuantity += argQuantity;
       }
+      
+      public void SetQuantity(int argQuantity)
+      {
+         actualQuantity = argQuantity;
+      }
 
-      public void SetNewSOTradeableObject(AbstractSOTradeableObject argSoTradeableObject)
+      public void SetNewSOTradeableObject(SOTradeableObject argSoTradeableObject)
       {
          refSoTradeableObject = argSoTradeableObject;
       }

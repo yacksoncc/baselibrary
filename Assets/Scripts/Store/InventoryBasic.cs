@@ -1,24 +1,26 @@
-﻿using UnityEngine;
-
-namespace Store
+﻿namespace Store
 {
-   public class InventoryBasic : AbstractStore
+   public class InventoryBasic : Inventory
    {
-      [SerializeField]
-      private SaveStore refSaveStore;
+      private ISaveInventory refSaveInventory;
 
-      [SerializeField]
-      private LoadStore refLoadStore;
+      private ILoadInventory refLoadInventory;
+
+      private void Awake()
+      {
+         var tmpSaveLoadInventory = new SaveLoadInventoryPlayerPrefs();
+         refSaveInventory = tmpSaveLoadInventory;
+         refLoadInventory = tmpSaveLoadInventory;
+      }
 
       private void OnDisable()
       {
-         refSaveStore.Save(this);
+         refSaveInventory.Save(this);
       }
 
       private void OnEnable()
       {
-         refLoadStore.RefAbstractStore = this;
-         refLoadStore.LoadFromPlayersPrefs();
+         refLoadInventory.Load(this);
       }
    }
 }

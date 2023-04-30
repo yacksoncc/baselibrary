@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 namespace PoolSystem
@@ -11,7 +12,7 @@ namespace PoolSystem
 
       public int initPooledQuantity;
 
-      private List<IObjectPooleable> listObjectsPooleables = new List<IObjectPooleable>();
+      private Collection<IObjectPooleable> listObjectsPooleables = new Collection<IObjectPooleable>();
 
       public void Instantiate(Vector3 argPosition, Quaternion argRotation, Transform argParent = null, bool argInitDefault = false)
       {

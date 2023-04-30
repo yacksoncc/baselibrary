@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Singleton;
 using UnityEngine;
-
 namespace PoolSystem
 {
-   public class Pool : AbstractSingleton<Pool>
+   public class Pool : Singleton<Pool>
    {
       [Tooltip("Set all prefabs of possible game objects that will instantiated on scene")]
       [SerializeField]
-      private ObjectPoolWrapper[] arrayObjectPoolWrapper;
+      private SOPoolObjects soPoolObjects;
 
       private readonly Dictionary<GameObject, ObjectPoolWrapper> dictionaryObjectPoolWrapper = new Dictionary<GameObject, ObjectPoolWrapper>();
 
       private void Awake()
       {
-         foreach(var tmpObjectPoolWrapper in arrayObjectPoolWrapper)
+         foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
             dictionaryObjectPoolWrapper.Add(tmpObjectPoolWrapper.goPool, tmpObjectPoolWrapper);
       }
 
       private void Start()
       {
-         foreach(var tmpObjectPoolWrapper in arrayObjectPoolWrapper)
+         foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
             for(int i = 0; i < tmpObjectPoolWrapper.initPooledQuantity; i++)
                InstantiateGameObjectPooleableDefaultInit(tmpObjectPoolWrapper.goPool);
       }
