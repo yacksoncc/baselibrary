@@ -1,6 +1,6 @@
 ﻿namespace BoxMessage
 {
-   public class BoxMessageDecision : AbstractBoxMessage
+   public class BoxMessageDecision : BoxMessage
    {
       protected override void OnButtonAccept()
       {

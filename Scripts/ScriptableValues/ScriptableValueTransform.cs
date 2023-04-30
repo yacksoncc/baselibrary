@@ -3,7 +3,7 @@ using UnityEngine;
 namespace ScriptableValues
 {
    [CreateAssetMenu(fileName = "svTransform", menuName = "ScriptableValue/Transform", order = 0)]
-   public class ScriptableValueTransform : AbstractScriptableValue<Transform>
+   public class ScriptableValueTransform : ScriptableValue<Transform>
    {
       public static implicit operator ScriptableValueTransform(Transform argScriptableValueA)
       {

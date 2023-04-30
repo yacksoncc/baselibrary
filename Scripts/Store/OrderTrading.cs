@@ -5,7 +5,7 @@
    /// </summary>
    public class OrderTrading
    {
-      public AbstractSOTradeableObject refSoTradeableObject;
+      public SOTradeableObject refSoTradeableObject;
 
       public int quantity;
 

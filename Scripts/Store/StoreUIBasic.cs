@@ -1,6 +1,6 @@
 ﻿namespace Store
 {
-   public class StoreUIBasic : AbstractStoreUI
+   public class StoreUIBasic : InventoryUI
    {
       private void OnEnable()
       {

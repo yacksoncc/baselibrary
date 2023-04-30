@@ -2,18 +2,18 @@
 
 namespace Store
 {
-   public class LotUIBasic : AbstractLotUI
+   public class LotUIBasic : LotUI
    {
       [SerializeField]
       private string tagStore;
 
-      private AbstractStore refStore;
+      private Inventory refStore;
 
       private int cantidadObjetosTradear = 1;
 
       private void Awake()
       {
-         refStore = GameObject.FindWithTag(tagStore).GetComponent<AbstractStore>();
+         refStore = GameObject.FindWithTag(tagStore).GetComponent<Inventory>();
       }
 
       public override void ButtonExecuteTrade()
@@ -21,10 +21,10 @@ namespace Store
          var tmpOrdenTrading = new OrderTrading
                                {
                                   quantity = cantidadObjetosTradear,
-                                  refSoTradeableObject = RefSoLot.RefSoTradeableObject
+                                  refSoTradeableObject = soLot.RefSoTradeableObject
                                };
 
-         Debug.Log(refAbstractStoreOwner.TradeLotFromThisStoreToOtherStore(tmpOrdenTrading, refStore)? "Object Bought" : "Object can't be Bought");
+         Debug.Log(RefInventoryOwner.TradeLotFromThisInventoryToOtherInventory(tmpOrdenTrading, refStore)? "Object Bought" : "Object can't be Bought");
       }
    }
 }

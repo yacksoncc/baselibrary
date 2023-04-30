@@ -2,7 +2,7 @@
 
 namespace Store
 {
-   public class StoreBasic : AbstractStore
+   public class StoreBasic : Inventory
    {
       [SerializeField]
       private InventoryBasic refInventoryBasic;
@@ -19,7 +19,7 @@ namespace Store
             if(tmpSoLotFinded.ThereIsQuantity(tmpQuantity) && tmpSoTradeableObject.SoCoinForBuyThisTradeableObject.ConsumeThisQuantityOnlyIfThereIsEnough(tmpSoTradeableObject.Price * tmpQuantity))
             {
                tmpSoLotFinded.RemoveQuantity(tmpQuantity);
-               refInventoryBasic.AddTradingOrder(argOrderTrading);
+               refInventoryBasic.AddTradingOrderToThisInventory(argOrderTrading);
             }
             else
                Debug.Log("Can't bought object");

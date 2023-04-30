@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace ScriptableValues
 {
     [CreateAssetMenu(fileName = "svFloat", menuName = "ScriptableValue/Float", order = 0)]
-    public class ScriptableValueFloat : AbstractScriptableValue<float>
+    public class ScriptableValueFloat : ScriptableValue<float>
     {
 /*
         //initialization

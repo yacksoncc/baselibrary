@@ -1,7 +1,6 @@
-﻿#pragma warning disable 0649
-namespace BoxMessage
+﻿namespace BoxMessage
 {
-   public class BoxMessageInfo : AbstractBoxMessage
+   public class BoxMessageInfo : BoxMessage
    {
       protected override void OnButtonAccept()
       {

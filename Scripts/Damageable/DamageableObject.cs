@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Damageable
 {
-   public class DamageableObject : AbstractSubject
+   public class DamageableObject : Subject
    {
       [Header("Health")]
       [SerializeField]

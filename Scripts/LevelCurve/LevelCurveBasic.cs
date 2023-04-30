@@ -2,8 +2,8 @@
 
 namespace LevelCurve
 {
-   [CreateAssetMenu(fileName = "LevelCurveBasic", menuName = "LevelCurve/Basic", order = 0)]
-   public class LevelCurveBasic : AbstractSOLevelCurve
+   [CreateAssetMenu(fileName = "SoLevelCurveBasic", menuName = "LevelCurve/SoLevelCurveBasic", order = 0)]
+   public class LevelCurveBasic : SOLevelCurve
    {
    }
 }

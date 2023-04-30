@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ScriptableValues
 {
     [CreateAssetMenu(fileName = "svVector2", menuName = "ScriptableValue/Vector2", order = 0)]
-    public class ScriptableValueVector2 : AbstractScriptableValue<Vector2>
+    public class ScriptableValueVector2 : ScriptableValue<Vector2>
     {
         public static implicit operator ScriptableValueVector2(Vector2 argScriptableValueA)
         {

@@ -1,23 +1,25 @@
-#pragma warning disable 0649
+﻿#pragma warning disable
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-namespace ScriptableEvents//cambiar el name space
+namespace ScriptableEvents
 {
-   [CreateAssetMenu(fileName = "se", menuName = "ScriptableEvents/ScriptableEvent", order = 0)]
-   public class ScriptableEvent : ScriptableObject
+   public abstract class ScriptableEvent<T> : ScriptableObject
    {
-      [SerializeField]
-      protected UnityEvent actionEvent;
-
+      [Tooltip("Show debug code?")]
       [SerializeField]
       private bool showDebug;
 
+      protected UnityEventT<T> actionEvent = new UnityEventT<T>();
+
       private string scriptableEventName;
+
+      private T lastValue;
+
+      [SerializeField]
+      private bool notifyLastValueToLastSubcripter;
 
 #if UNITY_EDITOR
       private void OnEnable()
@@ -27,15 +29,21 @@ namespace ScriptableEvents//cambiar el name space
       }
 #endif
 
-      public void Subscribe(UnityAction argMethodSubscribe)
+      public void Subscribe(UnityAction<T> argMethodSubscribe)
       {
          actionEvent.AddListener(argMethodSubscribe);
 
+         if(notifyLastValueToLastSubcripter)
+            argMethodSubscribe.Invoke(lastValue);
+
          if(showDebug)
+         {
+            Debug.Log("actionEvent : " + actionEvent.GetType());
             Debug.Log("Subscribe Method : " + argMethodSubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
+         }
       }
 
-      public void Unsubscribe(UnityAction argMethodUnsubscribe)
+      public void Unsubscribe(UnityAction<T> argMethodUnsubscribe)
       {
          actionEvent.RemoveListener(argMethodUnsubscribe);
 
@@ -43,16 +51,13 @@ namespace ScriptableEvents//cambiar el name space
             Debug.Log("Unsubscribe Method : " + argMethodUnsubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
       }
 
-      public void ExecuteEvent()
+      public void ExecuteEvent(T argValue)
       {
-         actionEvent.Invoke();
+         actionEvent.Invoke(argValue);
+         lastValue = argValue;
 
          if(showDebug)
             Debug.Log("Execute event : " + scriptableEventName == string.Empty? name : scriptableEventName);
       }
-   }
-
-   public class UnityEventT<T> : UnityEvent<T>
-   {
    }
 }
