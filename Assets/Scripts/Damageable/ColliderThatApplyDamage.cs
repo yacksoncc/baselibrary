@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
@@ -79,7 +80,7 @@ namespace Damageable
          if(!CanApplyDamage)
             return;
 
-         Collider[] tmpColliders = new Collider[0];
+         Collider[] tmpColliders = Array.Empty<Collider>();
 
          switch(colliderShape)
          {
@@ -102,7 +103,7 @@ namespace Damageable
                var tmpDamageableUnit = tmpCollider.GetComponent<DamageableObject>();
 
                if(tmpDamageableUnit)
-                  tmpDamageableUnit.RemoveHealth(Random.Range(minDamagePerSecond, maxDamagePerSecond) * Time.deltaTime);
+                  tmpDamageableUnit.RemoveHealthPoints(Random.Range(minDamagePerSecond, maxDamagePerSecond) * Time.deltaTime);
 
                if(applyImpulse)
                {
@@ -120,7 +121,7 @@ namespace Damageable
                var tmpDamageableUnit = tmpCollider.GetComponent<DamageableObject>();
 
                if(tmpDamageableUnit)
-                  tmpDamageableUnit.RemoveHealth(Random.Range(minDamagePerHit, maxDamageHit));
+                  tmpDamageableUnit.RemoveHealthPoints(Random.Range(minDamagePerHit, maxDamageHit));
 
                if(applyImpulse)
                {

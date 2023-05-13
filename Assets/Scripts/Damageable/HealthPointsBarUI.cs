@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Damageable
 {
-   public class HealthBarUI : MonoBehaviour
+   public class HealthPointsBarUI : MonoBehaviour
    {
       [SerializeField]
       private Image refImageHealthBar;
@@ -71,13 +71,13 @@ namespace Damageable
          actualShield = argActualShieldFactor;
       }
 
-      public void UpdateUIHealth(float argActualHealthFactor)
+      public void UpdateUIHealthPoints(float argActualHealthFactor)
       {
          gameObject.SetActive(argActualHealthFactor < 1f || alwaysShowOnCanvas);
          actualHealth = argActualHealthFactor;
       }
 
-      public void UpdateUIShield(float argActualShieldFactor)
+      public void UpdateUIShieldPoints(float argActualShieldFactor)
       {
          actualShield = argActualShieldFactor;
       }

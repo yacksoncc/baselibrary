@@ -104,9 +104,9 @@ namespace Damageable
                   continue;
 
                if(recoveryType == RecoveryType.Healing)
-                  tmpDamageableUnit.RecoverHealth(Random.Range(minAmountPerSecond, maxAmountPerSecond) * Time.deltaTime);
+                  tmpDamageableUnit.RecoverHealthPoints(Random.Range(minAmountPerSecond, maxAmountPerSecond) * Time.deltaTime);
                else if(recoveryType == RecoveryType.Shield)
-                  tmpDamageableUnit.RecoverShield(Random.Range(minAmountPerSecond, maxAmountPerSecond) * Time.deltaTime);
+                  tmpDamageableUnit.RecoverShieldPoints(Random.Range(minAmountPerSecond, maxAmountPerSecond) * Time.deltaTime);
             }
          }
          else if(recoverOneTimeOnly)
@@ -119,9 +119,9 @@ namespace Damageable
                   continue;
 
                if(recoveryType == RecoveryType.Healing)
-                  tmpDamageableUnit.RecoverHealth(Random.Range(minAmount, maxAmount));
+                  tmpDamageableUnit.RecoverHealthPoints(Random.Range(minAmount, maxAmount));
                else if(recoveryType == RecoveryType.Shield)
-                  tmpDamageableUnit.RecoverShield(Random.Range(minAmount, maxAmount));
+                  tmpDamageableUnit.RecoverShieldPoints(Random.Range(minAmount, maxAmount));
             }
 
             CanApplyRecovery = false;

@@ -1,5 +1,4 @@
 ﻿using Patterns.Observer;
-using PoolSystem;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,199 +8,177 @@ namespace Damageable
    {
       [Header("Health")]
       [SerializeField]
-      private float maxHealth;
+      private float maxHealthPoints;
 
-      private float actualHealth;
+      private float actualHealthPoints;
 
       [Header("Shield")]
       [SerializeField]
-      private bool hasShield;
+      private bool hasShieldPoints;
 
       [SerializeField]
-      private float maxShield;
+      private float maxShieldPoints;
 
-      private float actualShield;
-
-      [SerializeField]
-      private bool canRegenerateShield;
+      private float actualShieldPoints;
 
       [SerializeField]
-      private float quantityShieldRegeneratedPerSecond = 10f;
+      private bool canRegenerateShieldPoints;
 
       [SerializeField]
-      private float timeForRegenerateShield = 2f;
-
-      private float actualTimeWithoutRegenerateShield;
-
-      [Header("Health bar references")]
-      [SerializeField]
-      private HealthBarUI refHealthBarUI;
+      private float quantityShieldPointsRegeneratedPerSecond = 10f;
 
       [SerializeField]
-      private bool createHealthBar;
+      private float timeWaitForRegenerateShieldPointsAgain = 2f;
 
-      [SerializeField]
-      private GameObject prefabHealthBar;
-
-      [SerializeField]
-      private Vector3 healthBarPositionOffset;
-
-      private Camera refCamera;
-
-      private Canvas refCanvasDynamicObjects;
+      private float actualTimeWithoutRegenerateShieldPoints;
 
       public UnityEvent OnDie;
 
-      [SerializeField]
-      private bool canPositionHealthBarOnCanvas = true;
+      public float ActualHealthPointsNormalized
+      {
+         get
+         {
+            return actualHealthPoints / maxHealthPoints;
+         }
+      }
+
+      public float ActualShieldPointsNormalized
+      {
+         get
+         {
+            return actualShieldPoints / maxShieldPoints;
+         }
+      }
 
       public bool Die { get; private set; }
 
-      private void Awake()
-      {
-         refCamera = Camera.main;
-
-         var tmpCanvasDynamic = GameObject.FindWithTag("CanvasDynamic");
-
-         if(tmpCanvasDynamic)
-         {
-            refCanvasDynamicObjects = tmpCanvasDynamic.GetComponent<Canvas>();
-         }
-         else
-            Debug.LogError("Canvas with tag CanvasDynamic does exist");
-      }
-
       private void OnEnable()
       {
-         ResetHealthToMaxHealth();
+         ResetHealthPointsToMaxValue();
       }
 
       private void Update()
       {
-         RegenerateShield();
+         RegenerateShieldPoints();
       }
 
-      private void RegenerateShield()
+      private void RegenerateShieldPoints()
       {
          if(Die)
             return;
 
-         if(hasShield)
+         if(hasShieldPoints && canRegenerateShieldPoints)
          {
-            if(canRegenerateShield)
-            {
-               actualTimeWithoutRegenerateShield -= Time.deltaTime;
-               actualTimeWithoutRegenerateShield = Mathf.Clamp(actualTimeWithoutRegenerateShield, 0f, float.MaxValue);
+            actualTimeWithoutRegenerateShieldPoints -= Time.deltaTime;
 
-               if(actualTimeWithoutRegenerateShield == 0)
-               {
-                  actualShield += quantityShieldRegeneratedPerSecond * Time.deltaTime;
-                  actualShield = Mathf.Clamp(actualShield, 0f, maxShield);
-                  refHealthBarUI.UpdateUIShield(actualShield / maxShield);
-               }
+            if(actualTimeWithoutRegenerateShieldPoints < 0)
+            {
+               actualShieldPoints += quantityShieldPointsRegeneratedPerSecond * Time.deltaTime;
+               actualShieldPoints = Mathf.Clamp(actualShieldPoints, 0f, maxShieldPoints);
+               NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
             }
          }
       }
 
-      private void LateUpdate()
-      {
-         PositionHealthBarOnScreen();
-      }
-
-      private void PositionHealthBarOnScreen()
-      {
-         if(canPositionHealthBarOnCanvas)
-            refHealthBarUI.SetPositionOnCanvas(refCamera.WorldToScreenPoint(transform.position + healthBarPositionOffset));
-      }
-
-      private void ResetHealthToMaxHealth()
+      private void ResetHealthPointsToMaxValue()
       {
          Die = false;
 
-         if(createHealthBar)
-            refHealthBarUI = Pool.Instance.InstantiateGameObjectPooleable<HealthBarUI>(prefabHealthBar, transform.position, Quaternion.identity, refCanvasDynamicObjects.transform);
+         NotifyToObservers(DamageableUnitNotyfications.ResetHealthPointsToMaxValue);
 
-         refHealthBarUI.OwnerIsAlive = true;
-         actualHealth = maxHealth;
-         actualTimeWithoutRegenerateShield = timeForRegenerateShield;
+         actualHealthPoints = maxHealthPoints;
+         NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
 
-         if(hasShield)
+         actualTimeWithoutRegenerateShieldPoints = timeWaitForRegenerateShieldPointsAgain;
+
+         if(hasShieldPoints)
          {
-            actualShield = maxShield;
-            refHealthBarUI.UpdateUIHealthAndShield(actualShield / maxShield, actualHealth / maxHealth);
+            actualShieldPoints = maxShieldPoints;
+            NotifyToObservers(DamageableUnitNotyfications.UpdateShieldPoints);
          }
-         else
-            refHealthBarUI.UpdateUIHealth(actualHealth / maxHealth);
       }
 
-      public void RemoveHealth(float argHealthToRemove)
+      public void RemoveHealthPoints(float argHealthPointsToRemove)
       {
          if(Die)
             return;
 
-         if(hasShield)
+         if(hasShieldPoints)
          {
-            actualTimeWithoutRegenerateShield = timeForRegenerateShield;
+            actualTimeWithoutRegenerateShieldPoints = timeWaitForRegenerateShieldPointsAgain;
 
-            if(actualShield > 0)
+            if(actualShieldPoints > 0)
             {
-               actualShield -= argHealthToRemove;
+               actualShieldPoints -= argHealthPointsToRemove;
 
-               if(actualShield < 0)
+               if(actualShieldPoints < 0)
                {
-                  actualHealth -= Mathf.Abs(actualShield);
-                  actualShield = 0;
+                  actualHealthPoints -= Mathf.Abs(actualShieldPoints);
+                  actualShieldPoints = 0;
                }
 
-               refHealthBarUI.UpdateUIHealthAndShield(actualShield / maxShield, actualHealth / maxHealth);
+               NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
+               NotifyToObservers(DamageableUnitNotyfications.UpdateShieldPoints);
             }
             else
             {
-               actualHealth -= argHealthToRemove;
-               refHealthBarUI.UpdateUIHealth(actualHealth / maxHealth);
+               actualHealthPoints -= argHealthPointsToRemove;
+               NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
             }
          }
          else
          {
-            actualHealth -= argHealthToRemove;
-            refHealthBarUI.UpdateUIHealth(actualHealth / maxHealth);
+            actualHealthPoints -= argHealthPointsToRemove;
+            NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
          }
 
-         actualHealth = Mathf.Clamp(actualHealth, 0, int.MaxValue);
-         NotifyToObservers(actualHealth <= 0? DamageableUnitNotyfications.Death : DamageableUnitNotyfications.RemoveHealth);
+         actualHealthPoints = Mathf.Clamp(actualHealthPoints, 0, int.MaxValue);
+         NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
 
-         if(actualHealth <= 0)
+         if(actualHealthPoints == 0)
          {
             Die = true;
-            refHealthBarUI.OwnerIsAlive = false;
+            NotifyToObservers(DamageableUnitNotyfications.Death);
             OnDie.Invoke();
          }
       }
 
-      public void RecoverHealth(float argAmountOfHealing)
+      public void RecoverHealthPoints(float argAmountOfHealthPoints)
       {
          if(Die)
             return;
 
-         actualHealth += argAmountOfHealing;
-         actualHealth = Mathf.Clamp(actualHealth, 0, maxHealth);
-         refHealthBarUI.UpdateUIHealth(actualHealth / maxHealth);
+         actualHealthPoints += argAmountOfHealthPoints;
+         actualHealthPoints = Mathf.Clamp(actualHealthPoints, 0, maxHealthPoints);
+         NotifyToObservers(DamageableUnitNotyfications.UpdateHealthPoints);
       }
 
-      public void RecoverShield(float argAmountOfShield)
+      public void RecoverShieldPoints(float argAmountOfShieldPoints)
       {
-         if(Die || !hasShield)
+         if(Die || !hasShieldPoints)
             return;
 
-         actualShield += argAmountOfShield;
-         actualShield = Mathf.Clamp(actualShield, 0, maxShield);
-         refHealthBarUI.UpdateUIHealthAndShield(actualShield / maxShield, actualHealth / maxHealth);
+         actualShieldPoints += argAmountOfShieldPoints;
+         actualShieldPoints = Mathf.Clamp(actualShieldPoints, 0, maxShieldPoints);
+         NotifyToObservers(DamageableUnitNotyfications.UpdateShieldPoints);
       }
 
-      public enum DamageableUnitNotyfications
+      public bool HaveThisQuantityOfHealthPoints(float argAmountHealthPoints)
       {
-         Death,
-         RemoveHealth
+         return (actualHealthPoints - argAmountHealthPoints) >= 0;
       }
+
+      public bool HaveThisQuantityOfShieldPoints(float argAmountShieldPoints)
+      {
+         return (actualHealthPoints - argAmountShieldPoints) >= 0;
+      }
+   }
+
+   public enum DamageableUnitNotyfications
+   {
+      Death,
+      UpdateHealthPoints,
+      UpdateShieldPoints,
+      ResetHealthPointsToMaxValue
    }
 }
