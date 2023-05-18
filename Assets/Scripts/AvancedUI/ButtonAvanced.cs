@@ -32,6 +32,12 @@ namespace AvancedUI
          actualTimeTresholdTab += Time.deltaTime;
       }
 
+      protected override void OnDisable()
+      {
+         base.OnDisable();
+         buttonIsPressed = false;
+      }
+
       public override void OnPointerDown(PointerEventData eventData)
       {
          base.OnPointerDown(eventData);
