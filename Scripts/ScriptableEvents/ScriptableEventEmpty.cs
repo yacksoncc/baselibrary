@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEditor;
 #endif
 
-namespace ScriptableEvents//cambiar el name space
+namespace ScriptableEvents
 {
    [CreateAssetMenu(fileName = "se", menuName = "ScriptableEvents/ScriptableEventEmpty", order = 0)]
    public class ScriptableEventEmpty : ScriptableObject
@@ -13,12 +13,12 @@ namespace ScriptableEvents//cambiar el name space
       [SerializeField]
       protected UnityEvent actionEvent;
 
+#if UNITY_EDITOR
       [SerializeField]
       private bool showDebug;
 
       private string scriptableEventName;
 
-#if UNITY_EDITOR
       private void OnEnable()
       {
          var assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
@@ -30,28 +30,35 @@ namespace ScriptableEvents//cambiar el name space
       {
          actionEvent.AddListener(argMethodSubscribe);
 
+#if UNITY_EDITOR
          if(showDebug)
             Debug.Log("Subscribe Method : " + argMethodSubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
+#endif
       }
 
       public void Unsubscribe(UnityAction argMethodUnsubscribe)
       {
          actionEvent.RemoveListener(argMethodUnsubscribe);
 
+#if UNITY_EDITOR
          if(showDebug)
             Debug.Log("Unsubscribe Method : " + argMethodUnsubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
+#endif
       }
 
       public void ExecuteEvent()
       {
          actionEvent.Invoke();
 
+#if UNITY_EDITOR
          if(showDebug)
             Debug.Log("Execute event : " + scriptableEventName == string.Empty? name : scriptableEventName);
+#endif
       }
    }
 
    public class UnityEventT<T> : UnityEvent<T>
    {
+      
    }
 }

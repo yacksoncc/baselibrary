@@ -8,13 +8,7 @@ namespace ScriptableEvents
 {
    public abstract class ScriptableEvent<T> : ScriptableObject
    {
-      [Tooltip("Show debug code?")]
-      [SerializeField]
-      private bool showDebug;
-
-      protected UnityEventT<T> actionEvent = new UnityEventT<T>();
-
-      private string scriptableEventName;
+      private readonly UnityEventT<T> actionEvent = new UnityEventT<T>();
 
       private T lastValue;
 
@@ -22,6 +16,12 @@ namespace ScriptableEvents
       private bool notifyLastValueToLastSubcripter;
 
 #if UNITY_EDITOR
+      [Tooltip("Show debug code?")]
+      [SerializeField]
+      private bool showDebug;
+
+      private string scriptableEventName;
+
       private void OnEnable()
       {
          var assetPath = AssetDatabase.GetAssetPath(GetInstanceID());
@@ -36,19 +36,23 @@ namespace ScriptableEvents
          if(notifyLastValueToLastSubcripter)
             argMethodSubscribe.Invoke(lastValue);
 
+#if UNITY_EDITOR
          if(showDebug)
          {
             Debug.Log("actionEvent : " + actionEvent.GetType());
             Debug.Log("Subscribe Method : " + argMethodSubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
          }
+#endif
       }
 
       public void Unsubscribe(UnityAction<T> argMethodUnsubscribe)
       {
          actionEvent.RemoveListener(argMethodUnsubscribe);
 
+#if UNITY_EDITOR
          if(showDebug)
             Debug.Log("Unsubscribe Method : " + argMethodUnsubscribe.Method.Name + " To scriptable event :" + scriptableEventName == string.Empty? name : scriptableEventName);
+#endif
       }
 
       public void ExecuteEvent(T argValue)
@@ -56,8 +60,10 @@ namespace ScriptableEvents
          actionEvent.Invoke(argValue);
          lastValue = argValue;
 
+#if UNITY_EDITOR
          if(showDebug)
             Debug.Log("Execute event : " + scriptableEventName == string.Empty? name : scriptableEventName);
+#endif
       }
    }
 }
