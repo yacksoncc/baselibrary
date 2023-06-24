@@ -1,3 +1,4 @@
+using System;
 using ScriptableEvents;
 using UnityEngine;
 
@@ -40,6 +41,11 @@ namespace Optimization
          var tmpPositionPlaneFloor = transformPlaneFloor.position;
          boundsRender = new Bounds(tmpPositionPlaneFloor, Vector3.one);
          planeGround = new Plane(transformPlaneFloor.up, tmpPositionPlaneFloor);
+      }
+
+      private void OnDrawGizmos()
+      {
+         Gizmos.DrawCube(boundsRender.center, boundsRender.size);
       }
 
       private void Update()
