@@ -1,10 +1,10 @@
-using System;
 using ScriptableEvents;
+using Singleton;
 using UnityEngine;
 
 namespace Optimization
 {
-   public class CameraRenderBoundsXZ : MonoBehaviour
+   public class CameraRenderBoundsXZ : Singleton<CameraRenderBoundsXZ>
    {
       [Header("Setup")]
       [SerializeField]
