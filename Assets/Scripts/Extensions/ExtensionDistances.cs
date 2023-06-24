@@ -21,5 +21,24 @@ namespace Extensions
 
          return tmpComponentMoreNearToPosition;
       }
+      
+      public static GameObject GetGameObjectMoreNearToPositionXZ(Vector3 argPosition, GameObject[] arrayGameObjectMoreNear)
+      {
+         var tmpMaxDistance = float.MaxValue;
+         GameObject tmpGameObjectMoreNearToPosition = null;
+
+         foreach(var tmpGameObject in arrayGameObjectMoreNear)
+         {
+            var tmpDistanceToComponent = tmpGameObject.transform.DistanceXZToPosition(argPosition);
+            
+            if(tmpDistanceToComponent < tmpMaxDistance)
+            {
+               tmpGameObjectMoreNearToPosition = tmpGameObject;
+               tmpMaxDistance = tmpDistanceToComponent;
+            }
+         }
+
+         return tmpGameObjectMoreNearToPosition;
+      }
    }
 }
