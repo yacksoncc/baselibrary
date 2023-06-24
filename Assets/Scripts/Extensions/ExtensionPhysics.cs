@@ -38,5 +38,11 @@ namespace Extensions
 
          return tmpListComponentsFindedWithCollision;
       }
+
+      public static Collider OverlapSphereGetColliderMoreNearToPosition(Vector3 argPosition, float argRadius, LayerMask argLayerMask)
+      {
+         var tmpArrayCollisionWhitOtherObjects = Physics.OverlapSphere(argPosition, argRadius, argLayerMask);
+         return ExtensionDistances.GetComponentMoreNearToPositionXZ(argPosition, tmpArrayCollisionWhitOtherObjects);
+      }
    }
 }

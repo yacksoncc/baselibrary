@@ -8,5 +8,16 @@ namespace Extensions
       {
          return argArray[Random.Range(0, argArray.Length)];
       }
+
+      public static Vector3 RandomPointXZInSphere(float argScale = 1)
+      {
+         var tmpRandomAngle = Random.Range(0, Mathf.PI * 2);
+         return new Vector3(Mathf.Cos(tmpRandomAngle), 0, Mathf.Sin(tmpRandomAngle)) * argScale;
+      }
+
+      public static Vector3 RandomPointXZInSphereAroundPosition(Vector3 argPosition, float argScale = 1)
+      {
+         return RandomPointXZInSphere(argScale) + argPosition;
+      }
    }
 }
