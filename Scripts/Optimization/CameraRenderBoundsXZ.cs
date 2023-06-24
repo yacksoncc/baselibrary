@@ -25,8 +25,6 @@ namespace Optimization
       [SerializeField]
       private Vector3 expandBoundsAmount = new Vector3(1, 0, 1);
 
-      private float previousPositionCameraY;
-
       [Header("Events")]
       [SerializeField]
       private ScriptableEventEmpty seBoundsRenderUpdated;
@@ -66,17 +64,7 @@ namespace Optimization
             var tmpRayFromCenterScreen = refCameraToRender.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.width * 0.5f));
             planeGround.Raycast(tmpRayFromCenterScreen, out var tmpDistanceToPlane);
             var tmpPositionCenter = tmpRayFromCenterScreen.GetPoint(tmpDistanceToPlane);
-            tmpPositionCenter[0] = Mathf.Floor(tmpPositionCenter[0]);
-            tmpPositionCenter[2] = Mathf.Floor(tmpPositionCenter[2]);
             boundsRender.center = new Vector3(tmpPositionCenter[0], 0, tmpPositionCenter[2]);
-         }
-
-         var tmpPreviousPositionCameraY = tmpCameraPositionXYZ[1];
-
-         if(Mathf.Abs(previousPositionCameraY - tmpPreviousPositionCameraY) > thresholdToUpdateValues)
-         {
-            previousPositionCameraY = tmpPreviousPositionCameraY;
-            boundsWasUpdatedTheLastFrame = true;
             boundsRender.size = Vector3.one;
 
             var tmpBounds0_0Ray = refCameraToRender.ScreenPointToRay(new Vector3(0, 0));
