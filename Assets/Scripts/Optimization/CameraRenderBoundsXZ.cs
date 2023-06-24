@@ -21,6 +21,8 @@ namespace Optimization
 
       private Vector2 previousPositionCameraXZ;
 
+      private readonly Vector3 expandBoundsAmount = new Vector3(1, 0, 1);
+
       private float previousPositionCameraY;
 
       [Header("Events")]
@@ -28,6 +30,9 @@ namespace Optimization
       private ScriptableEventEmpty seBoundsRenderUpdated;
 
       private bool boundsWasUpdatedTheLastFrame;
+
+      public Bounds BoundsRender
+         => boundsRender;
 
       private void OnEnable()
       {
@@ -81,10 +86,16 @@ namespace Optimization
             var tmpBounds0_1Ray = refCameraToRender.ScreenPointToRay(new Vector3(0, Screen.height));
             planeGround.Raycast(tmpBounds0_1Ray, out tmpDistanceEnter);
             boundsRender.Encapsulate(tmpBounds0_1Ray.GetPoint(tmpDistanceEnter));
+            boundsRender.Expand(expandBoundsAmount);
          }
 
          if(boundsWasUpdatedTheLastFrame)
             seBoundsRenderUpdated.ExecuteEvent();
+      }
+
+      public bool GetIfWorldPositionCanBeRendered(Vector3 argWorldPosition)
+      {
+         return boundsRender.Contains(argWorldPosition);
       }
    }
 }
