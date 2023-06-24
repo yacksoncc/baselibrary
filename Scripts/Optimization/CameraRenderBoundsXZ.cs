@@ -93,7 +93,10 @@ namespace Optimization
          }
 
          if(boundsWasUpdatedTheLastFrame)
+         {
+            boundsWasUpdatedTheLastFrame = false;
             seBoundsRenderUpdated.ExecuteEvent();
+         }
       }
 
       public bool GetIfWorldPositionCanBeRendered(Vector3 argWorldPosition)
