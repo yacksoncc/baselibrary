@@ -21,7 +21,8 @@ namespace Optimization
 
       private Vector2 previousPositionCameraXZ;
 
-      private readonly Vector3 expandBoundsAmount = new Vector3(1, 0, 1);
+      [SerializeField]
+      private Vector3 expandBoundsAmount = new Vector3(1, 0, 1);
 
       private float previousPositionCameraY;
 
@@ -50,7 +51,6 @@ namespace Optimization
       {
          var tmpCameraPositionXYZ = refCameraToRender.transform.position;
          var tmpPositionXZ = new Vector2(tmpCameraPositionXYZ[0], tmpCameraPositionXYZ[2]);
-         var tmpPreviousPositionCameraY = tmpPositionXZ[1];
 
          if((tmpPositionXZ - previousPositionCameraXZ).magnitude > thresholdToUpdateValues)
          {
@@ -64,6 +64,8 @@ namespace Optimization
             tmpPositionCenter[2] = Mathf.Floor(tmpPositionCenter[2]);
             boundsRender.center = new Vector3(tmpPositionCenter[0], 0, tmpPositionCenter[2]);
          }
+
+         var tmpPreviousPositionCameraY = tmpCameraPositionXYZ[1];
 
          if(Mathf.Abs(previousPositionCameraY - tmpPreviousPositionCameraY) > thresholdToUpdateValues)
          {
@@ -86,6 +88,7 @@ namespace Optimization
             var tmpBounds0_1Ray = refCameraToRender.ScreenPointToRay(new Vector3(0, Screen.height));
             planeGround.Raycast(tmpBounds0_1Ray, out tmpDistanceEnter);
             boundsRender.Encapsulate(tmpBounds0_1Ray.GetPoint(tmpDistanceEnter));
+
             boundsRender.Expand(expandBoundsAmount);
          }
 
