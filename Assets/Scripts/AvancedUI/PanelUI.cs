@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ScriptableEvents;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -156,11 +155,11 @@ namespace AvancedUI
             imageBackground.raycastTarget = true;
 
             var tmpRectTransform = imageBackground.GetComponent<RectTransform>();
-            tmpRectTransform.anchorMax = new float2(1f);
-            tmpRectTransform.anchorMin = float2.zero;
-            tmpRectTransform.offsetMax = float2.zero;
-            tmpRectTransform.offsetMin = float2.zero;
-            tmpRectTransform.localScale = new float3(1f);
+            tmpRectTransform.anchorMax = Vector2.one;
+            tmpRectTransform.anchorMin = Vector2.zero;
+            tmpRectTransform.offsetMax = Vector2.zero;
+            tmpRectTransform.offsetMin = Vector2.zero;
+            tmpRectTransform.localScale = Vector3.one;
 
             imageBackground.transform.SetSiblingIndex(transform.GetSiblingIndex());
             imageBackground.gameObject.layer = LayerMask.NameToLayer("UI");
@@ -200,7 +199,7 @@ namespace AvancedUI
          while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
          {
             factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoAparicion;
-            RectTransform.localScale = new float3(1) * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
+            RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
             canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
 
             if(imageBackground)
@@ -210,10 +209,15 @@ namespace AvancedUI
             yield return null;
          }
 
+         factorTimeAnimation = 1f;
+         RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
+         canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
+
+         if(imageBackground)
+            imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
+
          if(seOnPanelShow is not null)
             seOnPanelShow.ExecuteEvent();
-
-         factorTimeAnimation = 1f;
       }
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
@@ -223,7 +227,7 @@ namespace AvancedUI
          while(tmpActualTimeAnimation >= 0)
          {
             factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoOcultacion;
-            RectTransform.localScale = new float3(1) * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
+            RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
             canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation);
 
             if(imageBackground)
