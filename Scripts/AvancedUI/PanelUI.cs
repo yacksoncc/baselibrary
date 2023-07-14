@@ -96,13 +96,15 @@ namespace AvancedUI
          }
       }
 
-      private RectTransform RectTransform
+      protected RectTransform RectTransform
       {
          get
          {
             return rectTransform ??= GetComponent<RectTransform>();
          }
       }
+
+      public bool IsOpen { get; set; }
 
       private void ShowPanel(bool argShowPanel = true, bool argDestroyObject = false)
       {
@@ -122,6 +124,7 @@ namespace AvancedUI
                couHiddePanel = null;
                couShowPanel = CouShowPanel();
                StartCoroutine(couShowPanel);
+               IsOpen = true;
             }
             else
                Debug.LogError($"The panel {typeof(T)} is already is opened", this);
@@ -248,6 +251,8 @@ namespace AvancedUI
             Destroy(imageBackground.gameObject);
             imageBackground = null;
          }
+
+         IsOpen = false;
 
          if(argDestroyObject)
             DestroyImmediate(gameObject);
