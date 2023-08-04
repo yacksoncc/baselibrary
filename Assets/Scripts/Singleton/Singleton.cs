@@ -18,10 +18,10 @@ namespace Singleton
             {
                var tmpObjectsOfType = FindInstanceInScene();
 
-               if(tmpObjectsOfType != null)
-                  instance = tmpObjectsOfType;
-               else
+               if(tmpObjectsOfType == null)
                   CreateGameObjectSingleton();
+               else
+                  instance = tmpObjectsOfType;
             }
 
             return instance;

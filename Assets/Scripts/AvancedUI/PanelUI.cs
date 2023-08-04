@@ -16,15 +16,15 @@ namespace AvancedUI
       {
          get
          {
-            if(instance is not null)
-               return instance;
+            if(instance == null)
+            {
+               var tmpObjectsOfType = FindInstanceInScene();
 
-            var tmpObjectsOfType = FindInstanceInScene();
-
-            if(tmpObjectsOfType is null)
-               Debug.LogError($"Panel with name: {typeof(T)} does exits in any scene, please setup.");
-            else
-               instance = tmpObjectsOfType;
+               if(tmpObjectsOfType == null)
+                  Debug.LogError($"Panel with name: {typeof(T)} does exits in any scene, please setup.");
+               else
+                  instance = tmpObjectsOfType;
+            }
 
             return instance;
          }
@@ -112,13 +112,13 @@ namespace AvancedUI
 
          if(argShowPanel)
          {
-            if(couShowPanel is null)
+            if(couShowPanel == null)
             {
                gameObject.SetActive(true);
 
                AddImageBackground();
 
-               if(couHiddePanel is not null)
+               if(couHiddePanel != null)
                   StopCoroutine(couHiddePanel);
 
                couHiddePanel = null;
@@ -131,9 +131,9 @@ namespace AvancedUI
          }
          else
          {
-            if(couHiddePanel is null)
+            if(couHiddePanel == null)
             {
-               if(couShowPanel is not null)
+               if(couShowPanel != null)
                   StopCoroutine(couShowPanel);
 
                couShowPanel = null;
@@ -173,7 +173,7 @@ namespace AvancedUI
 
                tmpButton.onClick.AddListener(() =>
                {
-                  if(couShowPanel is not null)
+                  if(couShowPanel != null)
                      ClosePanel();
                });
             }
@@ -219,7 +219,7 @@ namespace AvancedUI
          if(imageBackground)
             imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
 
-         if(seOnPanelShow is not null)
+         if(seOnPanelShow)
             seOnPanelShow.ExecuteEvent();
       }
 
@@ -240,7 +240,7 @@ namespace AvancedUI
             yield return null;
          }
 
-         if(seOnPanelHide is not null)
+         if(seOnPanelHide)
             seOnPanelHide.ExecuteEvent();
 
          factorTimeAnimation = 0f;
