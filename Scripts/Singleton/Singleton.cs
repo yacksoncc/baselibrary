@@ -14,11 +14,11 @@ namespace Singleton
       {
          get
          {
-            if(instance is null)
+            if(instance == null)
             {
                var tmpObjectsOfType = FindInstanceInScene();
 
-               if(tmpObjectsOfType is not null)
+               if(tmpObjectsOfType != null)
                   instance = tmpObjectsOfType;
                else
                   CreateGameObjectSingleton();
@@ -34,7 +34,7 @@ namespace Singleton
       }
 
       public static bool SingletonExist
-         => instance is not null;
+         => instance != null;
 
       private static T FindInstanceInScene()
       {
@@ -56,7 +56,7 @@ namespace Singleton
 
       public static void DestroySingleton()
       {
-         if(instance is not null)
+         if(instance != null)
             Destroy(instance.gameObject);
       }
 
