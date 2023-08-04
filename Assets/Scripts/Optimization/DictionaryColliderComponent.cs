@@ -30,6 +30,12 @@ namespace Optimization
 
       public bool GetComponent(Collider argCollider, out T argComponent)
       {
+         if(argCollider == null)
+         {
+            argComponent = default(T);
+            return false;
+         }
+
          return dictionaryCollider_Component.TryGetValue(argCollider.GetInstanceID(), out argComponent);
       }
 
