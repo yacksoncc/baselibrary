@@ -136,6 +136,9 @@ namespace AvancedUI
                if(couShowPanel != null)
                   StopCoroutine(couShowPanel);
 
+               if(!IsOpen)
+                  factorTimeAnimation = 1f;
+
                couShowPanel = null;
                couHiddePanel = CouHiddePanel(argDestroyObject);
                StartCoroutine(couHiddePanel);
