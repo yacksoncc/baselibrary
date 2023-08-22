@@ -1,8 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Singleton
 {
@@ -38,18 +34,8 @@ namespace Singleton
 
       private static T FindInstanceInScene()
       {
-         foreach(var tmpObjectFinded in Resources.FindObjectsOfTypeAll<T>())
-         {
-            if(tmpObjectFinded.hideFlags is HideFlags.NotEditable or HideFlags.HideAndDontSave)
-               continue;
-
-#if UNITY_EDITOR
-            if(EditorUtility.IsPersistent(tmpObjectFinded.gameObject))
-               continue;
-#endif
-
+         foreach(var tmpObjectFinded in FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             return tmpObjectFinded.GetComponent<T>();
-         }
 
          return null;
       }
