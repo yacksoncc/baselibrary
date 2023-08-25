@@ -115,7 +115,7 @@ namespace AvancedUI
       private void ShowPanel(bool argShowPanel = true, bool argDestroyObject = false)
       {
          if(initScale.magnitude == 0)
-            initScale = rectTransform.localScale;
+            initScale = RectTransform.localScale;
          
          canvasGroupAlpha ??= GetComponent<CanvasGroup>();
 
