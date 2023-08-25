@@ -11,7 +11,7 @@ namespace AvancedUI
    public abstract class PanelUI<T> : MonoBehaviour where T : PanelUI<T>
    {
       private Vector3 initScale;
-      
+
       private static T instance;
 
       public static T Instance
@@ -54,10 +54,6 @@ namespace AvancedUI
       private CanvasGroup canvasGroupAlpha;
 
       private RectTransform rectTransform;
-
-      private IEnumerator couShowPanel;
-
-      private IEnumerator couHiddePanel;
 
       private float factorTimeAnimation;
 
@@ -107,55 +103,38 @@ namespace AvancedUI
       }
 
       public bool IsOpen { get; set; }
-      
+
       public bool IsClosing { get; set; }
-      
+
       public bool IsOpening { get; set; }
 
       private void ShowPanel(bool argShowPanel = true, bool argDestroyObject = false)
       {
          if(initScale.magnitude == 0)
             initScale = RectTransform.localScale;
-         
+
          canvasGroupAlpha ??= GetComponent<CanvasGroup>();
 
          if(argShowPanel)
          {
-            if(couShowPanel == null)
+            if(!IsOpen && !IsOpening)
             {
                gameObject.SetActive(true);
-
                AddImageBackground();
-
-               if(couHiddePanel != null)
-               {
-                  IsClosing = false;
-                  StopCoroutine(couHiddePanel);
-               }
-
-               couHiddePanel = null;
-               couShowPanel = CouShowPanel();
-               StartCoroutine(couShowPanel);
+               IsClosing = false;
+               StopAllCoroutines();
+               StartCoroutine(CouShowPanel());
             }
             else
                Debug.LogError($"The panel {typeof(T)} is already is opened", this);
          }
          else
          {
-            if(couHiddePanel == null)
+            if(IsOpen && !IsClosing)
             {
-               if(couShowPanel != null)
-               {
-                  IsOpening = false;
-                  StopCoroutine(couShowPanel);
-               }
-
-               if(!IsOpen)
-                  factorTimeAnimation = 1f;
-
-               couShowPanel = null;
-               couHiddePanel = CouHiddePanel(argDestroyObject);
-               StartCoroutine(couHiddePanel);
+               IsOpening = false;
+               StopAllCoroutines();
+               StartCoroutine(CouHiddePanel(argDestroyObject));
             }
             else
                Debug.LogError($"The panel {typeof(T)} is already closed", this);
@@ -187,12 +166,7 @@ namespace AvancedUI
             if(soPanelBackgroundConfiguration.ClickOverBackgroundImageClosePanel)
             {
                var tmpButton = imageBackground.gameObject.AddComponent<Button>();
-
-               tmpButton.onClick.AddListener(() =>
-               {
-                  if(couShowPanel != null)
-                     ClosePanel();
-               });
+               tmpButton.onClick.AddListener(ClosePanel);
             }
          }
       }
@@ -266,6 +240,8 @@ namespace AvancedUI
             seOnPanelHide.ExecuteEvent();
 
          factorTimeAnimation = 0f;
+         IsOpen = false;
+         IsClosing = false;
          gameObject.SetActive(false);
 
          if(imageBackground)
@@ -273,12 +249,9 @@ namespace AvancedUI
             Destroy(imageBackground.gameObject);
             imageBackground = null;
          }
-         
+
          if(argDestroyObject)
             DestroyImmediate(gameObject);
-
-         IsOpen = false;
-         IsClosing = false;
       }
    }
 }
