@@ -10,6 +10,8 @@ namespace AvancedUI
    [RequireComponent(typeof(CanvasGroup))]
    public abstract class PanelUI<T> : MonoBehaviour where T : PanelUI<T>
    {
+      private Vector3 initScale;
+      
       private static T instance;
 
       public static T Instance
@@ -105,9 +107,16 @@ namespace AvancedUI
       }
 
       public bool IsOpen { get; set; }
+      
+      public bool IsClosing { get; set; }
+      
+      public bool IsOpening { get; set; }
 
       private void ShowPanel(bool argShowPanel = true, bool argDestroyObject = false)
       {
+         if(initScale.magnitude == 0)
+            initScale = rectTransform.localScale;
+         
          canvasGroupAlpha ??= GetComponent<CanvasGroup>();
 
          if(argShowPanel)
@@ -119,12 +128,14 @@ namespace AvancedUI
                AddImageBackground();
 
                if(couHiddePanel != null)
+               {
+                  IsClosing = false;
                   StopCoroutine(couHiddePanel);
+               }
 
                couHiddePanel = null;
                couShowPanel = CouShowPanel();
                StartCoroutine(couShowPanel);
-               IsOpen = true;
             }
             else
                Debug.LogError($"The panel {typeof(T)} is already is opened", this);
@@ -134,7 +145,10 @@ namespace AvancedUI
             if(couHiddePanel == null)
             {
                if(couShowPanel != null)
+               {
+                  IsOpening = false;
                   StopCoroutine(couShowPanel);
+               }
 
                if(!IsOpen)
                   factorTimeAnimation = 1f;
@@ -200,12 +214,13 @@ namespace AvancedUI
 
       private IEnumerator CouShowPanel()
       {
+         IsOpening = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
 
          while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
          {
             factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoAparicion;
-            RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
+            RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
             canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
 
             if(imageBackground)
@@ -216,7 +231,7 @@ namespace AvancedUI
          }
 
          factorTimeAnimation = 1f;
-         RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
+         RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
          canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
 
          if(imageBackground)
@@ -224,16 +239,20 @@ namespace AvancedUI
 
          if(seOnPanelShow)
             seOnPanelShow.ExecuteEvent();
+
+         IsOpening = false;
+         IsOpen = true;
       }
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
       {
+         IsClosing = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
 
          while(tmpActualTimeAnimation >= 0)
          {
             factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoOcultacion;
-            RectTransform.localScale = Vector3.one * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
+            RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
             canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation);
 
             if(imageBackground)
@@ -254,11 +273,12 @@ namespace AvancedUI
             Destroy(imageBackground.gameObject);
             imageBackground = null;
          }
-
-         IsOpen = false;
-
+         
          if(argDestroyObject)
             DestroyImmediate(gameObject);
+
+         IsOpen = false;
+         IsClosing = false;
       }
    }
 }
