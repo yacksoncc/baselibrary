@@ -117,27 +117,15 @@ namespace AvancedUI
 
          if(argShowPanel)
          {
-            if(!IsOpen && !IsOpening)
-            {
-               gameObject.SetActive(true);
-               AddImageBackground();
-               IsClosing = false;
-               StopAllCoroutines();
-               StartCoroutine(CouShowPanel());
-            }
-            else
-               Debug.LogError($"The panel {typeof(T)} is already is opened", this);
+            gameObject.SetActive(true);
+            AddImageBackground();
+            StopAllCoroutines();
+            StartCoroutine(CouShowPanel());
          }
          else
          {
-            if(IsOpen && !IsClosing)
-            {
-               IsOpening = false;
-               StopAllCoroutines();
-               StartCoroutine(CouHiddePanel(argDestroyObject));
-            }
-            else
-               Debug.LogError($"The panel {typeof(T)} is already closed", this);
+            StopAllCoroutines();
+            StartCoroutine(CouHiddePanel(argDestroyObject));
          }
       }
 
@@ -188,6 +176,7 @@ namespace AvancedUI
 
       private IEnumerator CouShowPanel()
       {
+         IsClosing = false;
          IsOpening = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
 
@@ -220,6 +209,7 @@ namespace AvancedUI
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
       {
+         IsOpening = false;
          IsClosing = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
 
