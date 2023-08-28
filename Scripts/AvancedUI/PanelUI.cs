@@ -119,11 +119,15 @@ namespace AvancedUI
          {
             gameObject.SetActive(true);
             AddImageBackground();
+            IsClosing = false;
+            IsOpening = true;
             StopAllCoroutines();
             StartCoroutine(CouShowPanel());
          }
          else
          {
+            IsOpening = false;
+            IsClosing = true;
             StopAllCoroutines();
             StartCoroutine(CouHiddePanel(argDestroyObject));
          }
@@ -176,8 +180,6 @@ namespace AvancedUI
 
       private IEnumerator CouShowPanel()
       {
-         IsClosing = false;
-         IsOpening = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
 
          while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
@@ -209,8 +211,6 @@ namespace AvancedUI
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
       {
-         IsOpening = false;
-         IsClosing = true;
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
 
          while(tmpActualTimeAnimation >= 0)
