@@ -15,18 +15,13 @@ namespace Singleton
                var tmpObjectsOfType = FindInstanceInScene();
 
                if(tmpObjectsOfType == null)
-                  CreateGameObjectSingleton();
+                  Debug.LogWarning($"Singleton with name: {typeof(T)} does exits in scene, please setup.");
                else
                   instance = tmpObjectsOfType;
             }
 
             return instance;
          }
-      }
-
-      private static void CreateGameObjectSingleton()
-      {
-         instance = (new GameObject(typeof(T).ToString())).AddComponent<T>();
       }
 
       public static bool SingletonExist
@@ -49,11 +44,6 @@ namespace Singleton
       public static void CreateInstanceAndDontDestroy()
       {
          DontDestroyOnLoad(Instance.gameObject);
-      }
-
-      public static void CreateInstance()
-      {
-         CreateGameObjectSingleton();
       }
    }
 }

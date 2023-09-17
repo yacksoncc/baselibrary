@@ -23,7 +23,7 @@ namespace AvancedUI
                var tmpObjectsOfType = FindInstanceInScene();
 
                if(tmpObjectsOfType == null)
-                  Debug.LogError($"Panel with name: {typeof(T)} does exits in any scene, please setup.");
+                  Debug.LogWarning($"Panel UI with name: {typeof(T)} does exits in scene, please setup.");
                else
                   instance = tmpObjectsOfType;
             }
