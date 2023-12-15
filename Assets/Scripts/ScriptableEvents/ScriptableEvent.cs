@@ -55,6 +55,16 @@ namespace ScriptableEvents
 #endif
       }
 
+      public void RemoveAllListerners()
+      {
+         actionEvent.RemoveAllListeners();
+
+#if UNITY_EDITOR
+         if(showDebug)
+            Debug.Log("Remove all listeners");
+#endif
+      }
+
       public void ExecuteEvent(T argValue)
       {
          actionEvent.Invoke(argValue);
