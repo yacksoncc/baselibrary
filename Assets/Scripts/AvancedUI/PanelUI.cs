@@ -72,35 +72,18 @@ namespace AvancedUI
 
       public ScriptableEventEmpty SeOnPanelShow
       {
-         set
-         {
-            seOnPanelShow = value;
-         }
-         get
-         {
-            return seOnPanelShow;
-         }
+         set => seOnPanelShow = value;
+         get => seOnPanelShow;
       }
 
       public ScriptableEventEmpty SeOnPanelHide
       {
-         set
-         {
-            seOnPanelHide = value;
-         }
-         get
-         {
-            return seOnPanelHide;
-         }
+         set => seOnPanelHide = value;
+         get => seOnPanelHide;
       }
 
       protected RectTransform RectTransform
-      {
-         get
-         {
-            return rectTransform ??= GetComponent<RectTransform>();
-         }
-      }
+         => rectTransform ??= GetComponent<RectTransform>();
 
       public bool IsOpen { get; set; }
 
@@ -114,6 +97,7 @@ namespace AvancedUI
             initScale = RectTransform.localScale;
 
          canvasGroupAlpha ??= GetComponent<CanvasGroup>();
+         StopAllCoroutines();
 
          if(argShowPanel)
          {
@@ -121,14 +105,12 @@ namespace AvancedUI
             AddImageBackground();
             IsClosing = false;
             IsOpening = true;
-            StopAllCoroutines();
             StartCoroutine(CouShowPanel());
          }
          else
          {
             IsOpening = false;
             IsClosing = true;
-            StopAllCoroutines();
             StartCoroutine(CouHiddePanel(argDestroyObject));
          }
       }
