@@ -57,6 +57,10 @@ namespace AvancedUI
 
       private float factorTimeAnimation;
 
+      private IEnumerator couShowPanel;
+
+      private IEnumerator couHidePanel;
+
       [Header("Background panel")]
       [SerializeField]
       private SOPanelBackgroundConfiguration soPanelBackgroundConfiguration;
@@ -97,7 +101,7 @@ namespace AvancedUI
             initScale = RectTransform.localScale;
 
          canvasGroupAlpha ??= GetComponent<CanvasGroup>();
-         StopAllCoroutines();
+         StopCoroutinesPanels();
 
          if(argShowPanel)
          {
@@ -105,14 +109,25 @@ namespace AvancedUI
             AddImageBackground();
             IsClosing = false;
             IsOpening = true;
-            StartCoroutine(CouShowPanel());
+            couShowPanel = CouShowPanel();
+            StartCoroutine(couShowPanel);
          }
          else
          {
             IsOpening = false;
             IsClosing = true;
-            StartCoroutine(CouHiddePanel(argDestroyObject));
+            couHidePanel = CouHiddePanel(argDestroyObject);
+            StartCoroutine(couHidePanel);
          }
+      }
+
+      private void StopCoroutinesPanels()
+      {
+         if(couShowPanel != null)
+            StopCoroutine(couShowPanel);
+
+         if(couHidePanel != null)
+            StopCoroutine(couHidePanel);
       }
 
       private void AddImageBackground()
