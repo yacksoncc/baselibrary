@@ -1,12 +1,12 @@
 {
   "name": "com.yccgames.baselibrary",
   "displayName": "Base Library",
-  "version": "2.0.32",
+  "version": "2.0.33",
   "unity": "2018.4",
   "description": "Contains all base libraries for programing any project.",
   "author": {
     "name": "Yeferson Castañeda Castañeda",
     "email": "ycc760@gmail.com",
-    "url": "https://www.yccgames.com"
+    "url": "https://www.kikiricompany.com"
   }
 }
