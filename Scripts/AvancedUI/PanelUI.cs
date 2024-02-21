@@ -208,6 +208,9 @@ namespace AvancedUI
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
       {
+         if(factorTimeAnimation == 0)
+            factorTimeAnimation = 1;
+         
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
 
          while(tmpActualTimeAnimation >= 0)
