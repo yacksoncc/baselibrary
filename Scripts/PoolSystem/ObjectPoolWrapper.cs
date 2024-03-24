@@ -36,14 +36,15 @@ namespace PoolSystem
 
       public void InstantiateDefaultInit()
       {
-         var tmpNewObjectPool = GameObject.Instantiate(goPool).GetComponent<IObjectPooleable>();
+         var tmpNewObjectPool = GameObject.Instantiate(goPool);
+         var tmpIObjectPooleable = tmpNewObjectPool.GetComponent<IObjectPooleable>();
 
-         if(tmpNewObjectPool == null)
+         if(tmpIObjectPooleable == null)
             Debug.LogError($"The prefab {goPool.name} cant be pooled because has no IObjectPooleable implementation");
          else
          {
-            tmpNewObjectPool.InstantiateFromPoolFirstTime(Vector3.zero, Quaternion.identity, null, true);
-            listObjectsPooleables.Add(tmpNewObjectPool);
+            tmpIObjectPooleable.InstantiateFromPoolFirstTime(Vector3.zero, tmpNewObjectPool.transform.rotation, null, true);
+            listObjectsPooleables.Add(tmpIObjectPooleable);
          }
       }
 
