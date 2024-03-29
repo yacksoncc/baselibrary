@@ -78,5 +78,10 @@ namespace PoolSystem
 
          return default(T);
       }
+
+      public void CleanUp()
+      {
+         listObjectsPooleables.Clear();
+      }
    }
 }

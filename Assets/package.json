@@ -1,7 +1,7 @@
 {
   "name": "com.yccgames.baselibrary",
   "displayName": "Base Library",
-  "version": "2.0.35",
+  "version": "2.0.36",
   "unity": "2018.4",
   "description": "Contains all base libraries for programing any project.",
   "author": {
