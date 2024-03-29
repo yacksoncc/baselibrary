@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Singleton;
 using UnityEngine;
 namespace PoolSystem
@@ -15,6 +16,12 @@ namespace PoolSystem
       {
          foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
             dictionaryObjectPoolWrapper.Add(tmpObjectPoolWrapper.goPool, tmpObjectPoolWrapper);
+      }
+
+      private void OnDestroy()
+      {
+         foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
+            tmpObjectPoolWrapper.CleanUp();
       }
 
       private void Start()
