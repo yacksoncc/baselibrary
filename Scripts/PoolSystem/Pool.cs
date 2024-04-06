@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ScriptableEvents;
 using Singleton;
 using UnityEngine;
+
 namespace PoolSystem
 {
    public class Pool : Singleton<Pool>
@@ -9,6 +10,9 @@ namespace PoolSystem
       [Tooltip("Set all prefabs of possible game objects that will instantiated on scene")]
       [SerializeField]
       private SOPoolObjects soPoolObjects;
+
+      [SerializeField]
+      private ScriptableEventEmpty seInitDefaultObjects;
 
       private readonly Dictionary<GameObject, ObjectPoolWrapper> dictionaryObjectPoolWrapper = new Dictionary<GameObject, ObjectPoolWrapper>();
 
@@ -18,6 +22,18 @@ namespace PoolSystem
             dictionaryObjectPoolWrapper.Add(tmpObjectPoolWrapper.goPool, tmpObjectPoolWrapper);
       }
 
+      private void OnEnable()
+      {
+         if(seInitDefaultObjects)
+            seInitDefaultObjects.Subscribe(InitDefaultObjects);
+      }
+
+      private void OnDisable()
+      {
+         if(seInitDefaultObjects)
+            seInitDefaultObjects.Unsubscribe(InitDefaultObjects);
+      }
+
       private void OnDestroy()
       {
          foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
@@ -25,6 +41,12 @@ namespace PoolSystem
       }
 
       private void Start()
+      {
+         if(!seInitDefaultObjects)
+            InitDefaultObjects();
+      }
+
+      private void InitDefaultObjects()
       {
          foreach(var tmpObjectPoolWrapper in soPoolObjects.arrayObjectPoolWrapper)
             for(int i = 0; i < tmpObjectPoolWrapper.initPooledQuantity; i++)
