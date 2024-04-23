@@ -4,22 +4,28 @@ using UnityEngine.Events;
 
 namespace ScriptableEvents
 {
-    public class ScriptableEventListener : MonoBehaviour
-    {
-        [SerializeField] private ScriptableEventEmpty scriptableEventEmpty;
-        
-        public UnityEvent unityEvent;
+   public class ScriptableEventListener : MonoBehaviour
+   {
+      [SerializeField]
+      private ScriptableEventEmpty scriptableEventEmpty;
 
-        private void OnEnable()
-        {
-            if (scriptableEventEmpty)
-                scriptableEventEmpty.Subscribe(unityEvent.Invoke);
-        }
+      public UnityEvent unityEvent;
 
-        private void OnDisable()
-        {
-            if (scriptableEventEmpty)
-                scriptableEventEmpty.Unsubscribe(unityEvent.Invoke);
-        }
-    }
+      private void OnEnable()
+      {
+         if(scriptableEventEmpty)
+            scriptableEventEmpty.Subscribe(unityEvent.Invoke);
+      }
+
+      private void OnDisable()
+      {
+         if(scriptableEventEmpty)
+            scriptableEventEmpty.Unsubscribe(unityEvent.Invoke);
+      }
+
+      public void ExecuteEvent()
+      {
+         unityEvent.Invoke();
+      }
+   }
 }
