@@ -45,6 +45,7 @@ namespace ScriptableEvents
       private IEnumerator CouExecuteEventDelay()
       {
          yield return waitForSecondsDelay;
+         unityEvent.Invoke();
       }
    }
 }
