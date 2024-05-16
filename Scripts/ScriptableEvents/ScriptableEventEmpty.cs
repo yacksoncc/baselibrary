@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
@@ -67,6 +68,7 @@ namespace ScriptableEvents
       }
    }
 
+   [Serializable]
    public class UnityEventT<T> : UnityEvent<T>
    {
    }
