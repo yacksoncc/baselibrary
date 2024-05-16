@@ -8,9 +8,9 @@ namespace ScriptableEvents
 {
    public abstract class ScriptableEvent<T> : ScriptableObject
    {
-      private readonly UnityEventT<T> actionEvent = new UnityEventT<T>();
+      protected readonly UnityEventT<T> actionEvent = new UnityEventT<T>();
 
-      private T lastValue;
+      protected T lastValue;
 
       [SerializeField]
       private bool notifyLastValueToLastSubcripter;
@@ -18,9 +18,9 @@ namespace ScriptableEvents
 #if UNITY_EDITOR
       [Tooltip("Show debug code?")]
       [SerializeField]
-      private bool showDebug;
+      protected bool showDebug;
 
-      private string scriptableEventName;
+      protected string scriptableEventName;
 
       private void OnEnable()
       {
@@ -65,15 +65,6 @@ namespace ScriptableEvents
 #endif
       }
 
-      public void ExecuteEvent(T argValue)
-      {
-         actionEvent.Invoke(argValue);
-         lastValue = argValue;
-
-#if UNITY_EDITOR
-         if(showDebug)
-            Debug.Log("Execute event : " + scriptableEventName == string.Empty? name : scriptableEventName);
-#endif
-      }
+      public abstract void ExecuteEvent(T argValue);
    }
 }
