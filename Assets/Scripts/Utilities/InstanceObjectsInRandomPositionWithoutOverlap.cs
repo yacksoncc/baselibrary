@@ -18,11 +18,11 @@ namespace Utilities
          if(listTransform.Count > 0)
             return;
 
-         foreach(Transform tmpChild in transform)
+         foreach(Transform tmpChild in transform)//agrega por orden 
             listTransform.Add(tmpChild);
       }
 
-      private void ForceFillListTransformPoints()
+      public void ForceFillListTransformPoints()
       {
          listTransform.Clear();
 
@@ -30,7 +30,7 @@ namespace Utilities
             listTransform.Add(tmpChild);
       }
 
-      public T InstantiateObject<T>(T argObjectToIntance, Quaternion argRotation) where T : UnityEngine.Object
+      public T InstantiateObject<T>(T argObjectToIntance, Quaternion argRotation) where T : UnityEngine.Object// ejecuta 
       {
          FillListTransformPoints();
          var tmpRandomIndex = Random.Range(0, listTransform.Count);
