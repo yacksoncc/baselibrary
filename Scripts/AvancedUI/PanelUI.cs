@@ -177,6 +177,8 @@ namespace AvancedUI
 
       private IEnumerator CouShowPanel()
       {
+         IsOpen = true;
+         
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
 
          while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
@@ -203,7 +205,6 @@ namespace AvancedUI
             seOnPanelShow.ExecuteEvent();
 
          IsOpening = false;
-         IsOpen = true;
       }
 
       private IEnumerator CouHiddePanel(bool argDestroyObject)
