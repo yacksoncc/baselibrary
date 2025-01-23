@@ -44,4 +44,9 @@ namespace Extensions
    public class UnityEventPointerEventData : UnityEvent<PointerEventData>
    {
    }
+
+   [Serializable]
+   public class UnityEventInt : UnityEvent<int>
+   {
+   }
 }

@@ -1,4 +1,5 @@
 ﻿#pragma warning disable
+using Extensions;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -13,6 +14,9 @@ namespace AvancedUI
 
       public UnityEvent ToggleOff;
 
+      public UnityEventInt ToggleOnSiblingIndex = new UnityEventInt();
+      
+
       protected override void Awake()
       {
          base.Awake();
@@ -22,7 +26,10 @@ namespace AvancedUI
       private void NotifyToggleState(bool argState)
       {
          if(argState)
+         {
             ToggleOn.Invoke();
+            ToggleOnSiblingIndex.Invoke(transform.GetSiblingIndex());
+         }
          else
             ToggleOff.Invoke();
       }

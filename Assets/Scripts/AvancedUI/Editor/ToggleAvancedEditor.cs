@@ -13,6 +13,8 @@ namespace AvancedUI.Editor
       private SerializedProperty ToggleOn;
 
       private SerializedProperty ToggleOff;
+      
+      private SerializedProperty ToggleOnSiblingIndex;
 
       protected override void OnEnable()
       {
@@ -20,6 +22,7 @@ namespace AvancedUI.Editor
          OnTogglePointerDown = serializedObject.FindProperty("OnTogglePointerDown");
          ToggleOn = serializedObject.FindProperty("ToggleOn");
          ToggleOff = serializedObject.FindProperty("ToggleOff");
+         ToggleOnSiblingIndex = serializedObject.FindProperty("ToggleOnSiblingIndex");
       }
 
       public override void OnInspectorGUI()
@@ -30,6 +33,7 @@ namespace AvancedUI.Editor
          EditorGUILayout.PropertyField(OnTogglePointerDown);
          EditorGUILayout.PropertyField(ToggleOn);
          EditorGUILayout.PropertyField(ToggleOff);
+         EditorGUILayout.PropertyField(ToggleOnSiblingIndex);
          serializedObject.ApplyModifiedProperties();
       }
    }
