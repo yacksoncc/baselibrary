@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Cinemachine;
+﻿using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Splines
@@ -8,9 +6,10 @@ namespace Splines
    [RequireComponent(typeof(CinemachineSmoothPath))]
    public class SplineMesh : MonoBehaviour
    {
+      /*
       [Tooltip("CinemachineSmoothPath component to get position and rotation")]
       [SerializeField]
-      private CinemachineSmoothPath refCinemachineSmoothPath;
+      private SplineContainer refCinemachineSmoothPath;
 
       [Tooltip("Mesh to fill spline along curvature")]
       [SerializeField]
@@ -135,15 +134,15 @@ namespace Splines
             if(meshToFillSpline.vertices[i][2] > tmpMaxDistanceZ)
                tmpMaxDistanceZ = meshToFillSpline.vertices[i][2];
 
-         var tmpSamplesQuantity = Mathf.CeilToInt(refCinemachineSmoothPath.PathLength / tmpMaxDistanceZ);
+         var tmpSamplesQuantity = Mathf.CeilToInt(refCinemachineSmoothPath.Spline.GetLength() / tmpMaxDistanceZ);
          arraySamplePosition = new SamplePositionAndRotation[tmpSamplesQuantity + 1];
 
          var tmpIndexSamplePosition = 0;
 
-         for(float i = 0; i < refCinemachineSmoothPath.PathLength; i += tmpMaxDistanceZ)
+         for(float i = 0; i < refCinemachineSmoothPath.Spline.GetLength(); i += tmpMaxDistanceZ)
          {
-            var tmpPositionAtUnit = refCinemachineSmoothPath.EvaluatePositionAtUnit(i, CinemachinePathBase.PositionUnits.Distance);
-            var tmpRotationAtUnit = refCinemachineSmoothPath.EvaluateOrientationAtUnit(i, CinemachinePathBase.PositionUnits.Distance);
+            var tmpPositionAtUnit = refCinemachineSmoothPath.Spline.EvaluatePosition(i);
+            var tmpRotationAtUnit = refCinemachineSmoothPath.Spline.evaEvaluateOrientationAtUnit(i);
             arraySamplePosition[tmpIndexSamplePosition] = new SamplePositionAndRotation(tmpPositionAtUnit, tmpRotationAtUnit);
             tmpIndexSamplePosition++;
          }
@@ -197,9 +196,9 @@ namespace Splines
       public Quaternion GetOrientationAtDistance(float argDistance)
       {
          return refCinemachineSmoothPath.EvaluateOrientationAtUnit(argDistance, CinemachinePathBase.PositionUnits.Distance);
-      }
+      }*/
    }
-
+/*
    [Serializable]
    public struct SamplePositionAndRotation
    {
@@ -212,5 +211,5 @@ namespace Splines
          position = argPosition;
          rotation = argRotation.normalized;
       }
-   }
+   }*/
 }

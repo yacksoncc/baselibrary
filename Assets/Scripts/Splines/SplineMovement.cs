@@ -27,8 +27,8 @@ namespace Splines
       private void Update()
       {
          distanceTraveled += speed * Time.deltaTime;
-         transform.position = refSplineMesh.GetPositionAtDistance(distanceTraveled);
-         transform.rotation = refSplineMesh.GetOrientationAtDistance(distanceTraveled);
+         //transform.position = refSplineMesh.GetPositionAtDistance(distanceTraveled);
+         //transform.rotation = refSplineMesh.GetOrientationAtDistance(distanceTraveled);
       }
    }
 }
