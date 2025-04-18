@@ -6,7 +6,7 @@ namespace Splines
 {
    [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
    public class SplineObject : MonoBehaviour
-   {
+   {/*
       [SerializeField]
       private SplineMesh refSplineMesh;
 
@@ -88,6 +88,6 @@ namespace Splines
          refRenderer.mesh.SetVertices(tmpVertices);
          refRenderer.mesh.RecalculateBounds();
          OnMeshUpdated.Invoke();
-      }
+      }*/
    }
 }
