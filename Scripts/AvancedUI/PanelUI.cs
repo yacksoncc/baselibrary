@@ -176,6 +176,8 @@ namespace AvancedUI
 
          if(imageBackground)
             imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
+         
+         gameObject.SetActive(false);
       }
 
       public void ClosePanelAndDestroyIt()
