@@ -165,6 +165,19 @@ namespace AvancedUI
          ShowPanel(false);
       }
 
+      public void ClosePanelInmediatly()
+      {
+         IsOpening = false;
+         IsOpen = false;
+         IsClosing = false;
+         factorTimeAnimation = 0;
+         RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
+         canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation);
+
+         if(imageBackground)
+            imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
+      }
+
       public void ClosePanelAndDestroyIt()
       {
          ShowPanel(false, true);
@@ -178,7 +191,7 @@ namespace AvancedUI
       private IEnumerator CouShowPanel()
       {
          IsOpen = true;
-         
+
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
 
          while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
@@ -211,7 +224,7 @@ namespace AvancedUI
       {
          if(factorTimeAnimation == 0)
             factorTimeAnimation = 1;
-         
+
          var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
 
          while(tmpActualTimeAnimation >= 0)
