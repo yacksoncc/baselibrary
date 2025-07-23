@@ -5,7 +5,7 @@
       protected override void OnButtonAccept()
       {
          base.OnButtonAccept();
-         ClosePanelAndDestroyIt();
+         ClosePanelAndDestroy();
       }
    }
 }

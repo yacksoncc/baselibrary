@@ -5,13 +5,13 @@
       protected override void OnButtonAccept()
       {
          base.OnButtonAccept();
-         ClosePanelAndDestroyIt();
+         ClosePanelAndDestroy();
       }
 
       protected override void OnButtonCancel()
       {
          base.OnButtonCancel();
-         ClosePanelAndDestroyIt();
+         ClosePanelAndDestroy();
       }
    }
 }
