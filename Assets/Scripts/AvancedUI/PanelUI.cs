@@ -10,8 +10,6 @@ namespace AvancedUI
    [RequireComponent(typeof(CanvasGroup))]
    public abstract class PanelUI<T> : MonoBehaviour where T : PanelUI<T>
    {
-      private Vector3 initScale;
-
       private static T instance;
 
       public static T Instance
@@ -20,12 +18,12 @@ namespace AvancedUI
          {
             if(instance == null)
             {
-               var tmpObjectsOfType = FindInstanceInScene();
+               var tmpFoundInstance = FindInstanceInScene();
 
-               if(tmpObjectsOfType == null)
-                  Debug.LogWarning($"Panel UI with name: {typeof(T)} does exits in scene, please setup.");
+               if(tmpFoundInstance == null)
+                  Debug.LogWarning($"Panel UI with name: {typeof(T)} does not exist in scene, please setup.");
                else
-                  instance = tmpObjectsOfType;
+                  instance = tmpFoundInstance;
             }
 
             return instance;
@@ -34,53 +32,55 @@ namespace AvancedUI
 
       private static T FindInstanceInScene()
       {
-         var tmpObjectsInScene = new List<T>();
+         var tmpInstancesInScene = new List<T>();
 
-         foreach(var tmpObjectFinded in Resources.FindObjectsOfTypeAll<T>())
+         foreach(var tmpFoundObject in Resources.FindObjectsOfTypeAll<T>())
          {
-            if(tmpObjectFinded.gameObject.scene == default(Scene))
+            if(tmpFoundObject.gameObject.scene == default)
                continue;
 
-            tmpObjectsInScene.Add(tmpObjectFinded.GetComponent<T>());
+            tmpInstancesInScene.Add(tmpFoundObject.GetComponent<T>());
          }
 
-         return tmpObjectsInScene.Count > 0? tmpObjectsInScene[0] : null;
+         return tmpInstancesInScene.Count > 0? tmpInstancesInScene[0] : null;
       }
 
-      [Header("Animación panel")]
-      [SerializeField, Tooltip("Animations curve that control how the panel looks on screen. Create a new SO with curves in rightClick/Create/PanelUI/SOAnimationsCurvePanelUI")]
+      [Header("Panel Animation")]
+      [SerializeField, Tooltip("Animation curves that control how the panel appears/disappears on screen")]
       private SOAnimationsCurvePanelUI soAnimationsCurvePanelUI;
 
-      private CanvasGroup canvasGroupAlpha;
-
+      private Vector3 initialScale;
+      
+      private CanvasGroup canvasGroup;
+      
       private RectTransform rectTransform;
+      
+      private float animationTimeProgress;
+      
+      private IEnumerator showPanelCoroutine;
+      
+      private IEnumerator hidePanelCoroutine;
 
-      private float factorTimeAnimation;
-
-      private IEnumerator couShowPanel;
-
-      private IEnumerator couHidePanel;
-
-      [Header("Background panel")]
+      [Header("Background Panel")]
       [SerializeField]
       private SOPanelBackgroundConfiguration soPanelBackgroundConfiguration;
 
-      private Image imageBackground;
+      private Image backgroundImage;
 
       [Header("Scriptable Events")]
-      [SerializeField, Tooltip("")]
+      [SerializeField, Tooltip("Executed when panel completes showing")]
       private ScriptableEventEmpty seOnPanelShow;
 
-      [SerializeField, Tooltip("Se ejecuta cuando el panel completa su ocultacion")]
+      [SerializeField, Tooltip("Executed when panel completes hiding")]
       private ScriptableEventEmpty seOnPanelHide;
 
-      public ScriptableEventEmpty SeOnPanelShow
+      public ScriptableEventEmpty OnPanelShowEvent
       {
          set => seOnPanelShow = value;
          get => seOnPanelShow;
       }
 
-      public ScriptableEventEmpty SeOnPanelHide
+      public ScriptableEventEmpty OnPanelHideEvent
       {
          set => seOnPanelHide = value;
          get => seOnPanelHide;
@@ -89,172 +89,228 @@ namespace AvancedUI
       protected RectTransform RectTransform
          => rectTransform ??= GetComponent<RectTransform>();
 
-      public bool IsOpen { get; set; }
+      public bool IsOpen { get; private set; }
+      public bool IsClosing { get; private set; }
+      public bool IsOpening { get; private set; }
 
-      public bool IsClosing { get; set; }
-
-      public bool IsOpening { get; set; }
-
-      private void ShowPanel(bool argShowPanel = true, bool argDestroyObject = false)
+      private void InitializeComponents()
       {
-         if(initScale.magnitude == 0)
-            initScale = RectTransform.localScale;
+         if(initialScale.magnitude == 0)
+            initialScale = RectTransform.localScale;
 
-         canvasGroupAlpha ??= GetComponent<CanvasGroup>();
-         StopCoroutinesPanels();
+         canvasGroup ??= GetComponent<CanvasGroup>();
+      }
 
-         if(argShowPanel)
-         {
-            gameObject.SetActive(true);
-            AddImageBackground();
-            IsClosing = false;
-            IsOpening = true;
-            couShowPanel = CouShowPanel();
-            StartCoroutine(couShowPanel);
-         }
+      private void ExecuteAnimation(bool argShow, bool argDestroyAfterHide = false)
+      {
+         InitializeComponents();
+         StopAllPanelCoroutines();
+
+         if(argShow)
+            StartShowAnimation();
          else
-         {
-            IsOpening = false;
-            IsClosing = true;
-            couHidePanel = CouHiddePanel(argDestroyObject);
-            StartCoroutine(couHidePanel);
-         }
+            StartHideAnimation(argDestroyAfterHide);
       }
 
-      private void StopCoroutinesPanels()
+      private void StartShowAnimation()
       {
-         if(couShowPanel != null)
-            StopCoroutine(couShowPanel);
+         gameObject.SetActive(true);
+         CreateBackgroundIfNeeded();
 
-         if(couHidePanel != null)
-            StopCoroutine(couHidePanel);
+         IsClosing = false;
+         IsOpening = true;
+
+         showPanelCoroutine = CouShowPanel();
+         StartCoroutine(showPanelCoroutine);
       }
 
-      private void AddImageBackground()
+      private void StartHideAnimation(bool argDestroyAfterHide)
       {
-         if(imageBackground)
+         IsOpening = false;
+         IsClosing = true;
+
+         hidePanelCoroutine = CouHidePanel(argDestroyAfterHide);
+         StartCoroutine(hidePanelCoroutine);
+      }
+
+      private void StopAllPanelCoroutines()
+      {
+         if(showPanelCoroutine != null)
+            StopCoroutine(showPanelCoroutine);
+
+         if(hidePanelCoroutine != null)
+            StopCoroutine(hidePanelCoroutine);
+      }
+
+      private void CreateBackgroundIfNeeded()
+      {
+         if(backgroundImage || !ShouldShowBackground())
             return;
 
-         if(soPanelBackgroundConfiguration && soPanelBackgroundConfiguration.ShowBackgroundImage)
+         CreateBackgroundImage();
+         ConfigureBackgroundTransform();
+         SetupBackgroundInteraction();
+      }
+
+      private bool ShouldShowBackground()
+      {
+         return soPanelBackgroundConfiguration && soPanelBackgroundConfiguration.ShowBackgroundImage;
+      }
+
+      private void CreateBackgroundImage()
+      {
+         var tmpBackgroundObject = new GameObject("BackgroundPanel");
+         backgroundImage = tmpBackgroundObject.AddComponent<Image>();
+         backgroundImage.transform.SetParent(transform.parent);
+         backgroundImage.color = GetBackgroundColorWithAlpha(0f);
+         backgroundImage.raycastTarget = true;
+         backgroundImage.gameObject.layer = LayerMask.NameToLayer("UI");
+         backgroundImage.transform.SetSiblingIndex(transform.GetSiblingIndex());
+      }
+
+      private void ConfigureBackgroundTransform()
+      {
+         var tmpRectTransform = backgroundImage.GetComponent<RectTransform>();
+         tmpRectTransform.anchorMax = Vector2.one;
+         tmpRectTransform.anchorMin = Vector2.zero;
+         tmpRectTransform.offsetMax = Vector2.zero;
+         tmpRectTransform.offsetMin = Vector2.zero;
+         tmpRectTransform.localScale = Vector3.one;
+      }
+
+      private void SetupBackgroundInteraction()
+      {
+         if(soPanelBackgroundConfiguration.ClickOverBackgroundImageClosePanel)
          {
-            imageBackground ??= (new GameObject("BackgroundPanel")).AddComponent<Image>();
-            imageBackground.transform.SetParent(transform.parent);
-            imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], 0);
-            imageBackground.raycastTarget = true;
+            var tmpButton = backgroundImage.gameObject.AddComponent<Button>();
+            tmpButton.onClick.AddListener(ClosePanel);
+         }
+      }
 
-            var tmpRectTransform = imageBackground.GetComponent<RectTransform>();
-            tmpRectTransform.anchorMax = Vector2.one;
-            tmpRectTransform.anchorMin = Vector2.zero;
-            tmpRectTransform.offsetMax = Vector2.zero;
-            tmpRectTransform.offsetMin = Vector2.zero;
-            tmpRectTransform.localScale = Vector3.one;
+      private Color GetBackgroundColorWithAlpha(float argAlpha)
+      {
+         var tmpColorArray = soPanelBackgroundConfiguration.ColorBackgroundImage;
+         return new Color(tmpColorArray[0], tmpColorArray[1], tmpColorArray[2], argAlpha);
+      }
 
-            imageBackground.transform.SetSiblingIndex(transform.GetSiblingIndex());
-            imageBackground.gameObject.layer = LayerMask.NameToLayer("UI");
+      private void UpdatePanelVisuals(float argAnimationFactor, bool argIsShowing)
+      {
+         var tmpScaleCurve = argIsShowing? soAnimationsCurvePanelUI._animationCurveEscalaAparecer : soAnimationsCurvePanelUI._animationCurveEscalaOcultar;
+         var tmpAlphaCurve = argIsShowing? soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer : soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar;
 
-            if(soPanelBackgroundConfiguration.ClickOverBackgroundImageClosePanel)
-            {
-               var tmpButton = imageBackground.gameObject.AddComponent<Button>();
-               tmpButton.onClick.AddListener(ClosePanel);
-            }
+         var tmpEvaluationValue = argIsShowing? argAnimationFactor : 1f - argAnimationFactor;
+
+         RectTransform.localScale = initialScale * tmpScaleCurve.Evaluate(tmpEvaluationValue);
+         canvasGroup.alpha = tmpAlphaCurve.Evaluate(tmpEvaluationValue);
+
+         if(backgroundImage)
+         {
+            var tmpBackgroundAlpha = tmpAlphaCurve.Evaluate(tmpEvaluationValue) * soPanelBackgroundConfiguration.ColorBackgroundImage[3];
+            backgroundImage.color = GetBackgroundColorWithAlpha(tmpBackgroundAlpha);
+         }
+      }
+
+      private void DestroyBackground()
+      {
+         if(backgroundImage)
+         {
+            Destroy(backgroundImage.gameObject);
+            backgroundImage = null;
          }
       }
 
       public void ClosePanel()
       {
-         ShowPanel(false);
+         ExecuteAnimation(false);
       }
 
-      public void ClosePanelInmediatly()
+      public void ClosePanelImmediately()
       {
-         IsOpening = false;
-         IsOpen = false;
-         IsClosing = false;
-         factorTimeAnimation = 0;
-         RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
-         canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation);
+         ResetPanelState();
 
-         if(imageBackground)
-            imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
-         
+         animationTimeProgress = 0f;
+         UpdatePanelVisuals(0f, false);
+
          gameObject.SetActive(false);
+         DestroyBackground();
       }
 
-      public void ClosePanelAndDestroyIt()
+      public void ClosePanelAndDestroy()
       {
-         ShowPanel(false, true);
+         ExecuteAnimation(false, true);
       }
 
       public void OpenPanel()
       {
-         ShowPanel();
+         ExecuteAnimation(true);
+      }
+
+      public void ForceOpenPanelFromZero()
+      {
+         ResetPanelState();
+         InitializeComponents();
+         StopAllPanelCoroutines();
+         UpdatePanelVisuals(0f, false);
+
+         if(backgroundImage)
+            backgroundImage.color = GetBackgroundColorWithAlpha(0f);
+
+         StartShowAnimation();
+      }
+
+      private void ResetPanelState()
+      {
+         IsOpen = false;
+         IsOpening = false;
+         IsClosing = false;
+         animationTimeProgress = 0f;
       }
 
       private IEnumerator CouShowPanel()
       {
          IsOpen = true;
 
-         var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoAparicion;
+         var tmpCurrentAnimationTime = animationTimeProgress * soAnimationsCurvePanelUI.TiempoAparicion;
+         var tmpTotalAnimationTime = soAnimationsCurvePanelUI.TiempoAparicion;
 
-         while(tmpActualTimeAnimation <= soAnimationsCurvePanelUI.TiempoAparicion)
+         while(tmpCurrentAnimationTime <= tmpTotalAnimationTime)
          {
-            factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoAparicion;
-            RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
-            canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
+            animationTimeProgress = tmpCurrentAnimationTime / tmpTotalAnimationTime;
+            UpdatePanelVisuals(animationTimeProgress, true);
 
-            if(imageBackground)
-               imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
-
-            tmpActualTimeAnimation += Time.deltaTime;
+            tmpCurrentAnimationTime += Time.deltaTime;
             yield return null;
          }
 
-         factorTimeAnimation = 1f;
-         RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaAparecer.Evaluate(factorTimeAnimation);
-         canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation);
+         // Ensure final state
+         animationTimeProgress = 1f;
+         UpdatePanelVisuals(animationTimeProgress, true);
 
-         if(imageBackground)
-            imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaAparecer.Evaluate(factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
-
-         if(seOnPanelShow)
-            seOnPanelShow.ExecuteEvent();
-
+         seOnPanelShow?.ExecuteEvent();
          IsOpening = false;
       }
 
-      private IEnumerator CouHiddePanel(bool argDestroyObject)
+      private IEnumerator CouHidePanel(bool argDestroyObject)
       {
-         if(factorTimeAnimation == 0)
-            factorTimeAnimation = 1;
+         if(animationTimeProgress == 0f)
+            animationTimeProgress = 1f;
 
-         var tmpActualTimeAnimation = factorTimeAnimation * soAnimationsCurvePanelUI.TiempoOcultacion;
+         var tmpCurrentAnimationTime = animationTimeProgress * soAnimationsCurvePanelUI.TiempoOcultacion;
 
-         while(tmpActualTimeAnimation >= 0)
+         while(tmpCurrentAnimationTime >= 0f)
          {
-            factorTimeAnimation = tmpActualTimeAnimation / soAnimationsCurvePanelUI.TiempoOcultacion;
-            RectTransform.localScale = initScale * soAnimationsCurvePanelUI._animationCurveEscalaOcultar.Evaluate(1 - factorTimeAnimation);
-            canvasGroupAlpha.alpha = soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation);
+            animationTimeProgress = tmpCurrentAnimationTime / soAnimationsCurvePanelUI.TiempoOcultacion;
+            UpdatePanelVisuals(animationTimeProgress, false);
 
-            if(imageBackground)
-               imageBackground.color = new Color(soPanelBackgroundConfiguration.ColorBackgroundImage[0], soPanelBackgroundConfiguration.ColorBackgroundImage[1], soPanelBackgroundConfiguration.ColorBackgroundImage[2], soAnimationsCurvePanelUI._animationCurveTransparenciaOcultar.Evaluate(1 - factorTimeAnimation) * soPanelBackgroundConfiguration.ColorBackgroundImage[3]);
-
-            tmpActualTimeAnimation -= Time.deltaTime;
+            tmpCurrentAnimationTime -= Time.deltaTime;
             yield return null;
          }
 
-         if(seOnPanelHide)
-            seOnPanelHide.ExecuteEvent();
+         seOnPanelHide?.ExecuteEvent();
 
-         factorTimeAnimation = 0f;
-         IsOpen = false;
-         IsClosing = false;
+         ResetPanelState();
          gameObject.SetActive(false);
-
-         if(imageBackground)
-         {
-            Destroy(imageBackground.gameObject);
-            imageBackground = null;
-         }
+         DestroyBackground();
 
          if(argDestroyObject)
             DestroyImmediate(gameObject);
