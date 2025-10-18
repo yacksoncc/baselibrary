@@ -55,6 +55,23 @@ namespace PoolSystem
 
       public void InstantiateGameObjectPooleable(GameObject argGameObjectPrefab, Vector3 argPosition, Quaternion argRotation, Transform argParent = null)
       {
+         if(!dictionaryObjectPoolWrapper.ContainsKey(argGameObjectPrefab))
+         {
+            if(argGameObjectPrefab.GetComponent<IObjectPooleable>() == null)
+            {
+               Debug.LogError($"The object {argGameObjectPrefab.name} is not IObjectPooleable");
+               return;
+            }
+
+            var tmpObjectPoolWrapper = new ObjectPoolWrapper
+                                       {
+                                          goPool = argGameObjectPrefab,
+                                          initPooledQuantity = 1
+                                       };
+
+            dictionaryObjectPoolWrapper.Add(argGameObjectPrefab, tmpObjectPoolWrapper);
+         }
+         
          dictionaryObjectPoolWrapper[argGameObjectPrefab].Instantiate(argPosition, argRotation, argParent);
       }
 
@@ -65,6 +82,23 @@ namespace PoolSystem
 
       public T InstantiateGameObjectPooleable<T>(GameObject argGameObjectPrefab, Vector3 argPosition, Quaternion argRotation, Transform argParent = null, bool argInitDefault = false)
       {
+         if(!dictionaryObjectPoolWrapper.ContainsKey(argGameObjectPrefab))
+         {
+            if(argGameObjectPrefab.GetComponent<IObjectPooleable>() == null)
+            {
+               Debug.LogError($"The object {argGameObjectPrefab.name} is not IObjectPooleable");
+               return default;
+            }
+            
+            var tmpObjectPoolWrapper = new ObjectPoolWrapper
+                                       {
+                                          goPool = argGameObjectPrefab,
+                                          initPooledQuantity = 1
+                                       };
+
+            dictionaryObjectPoolWrapper.Add(argGameObjectPrefab, tmpObjectPoolWrapper);
+         }
+         
          return dictionaryObjectPoolWrapper[argGameObjectPrefab].Instantiate<T>(argPosition, argRotation, argParent, argInitDefault);
       }
    }
