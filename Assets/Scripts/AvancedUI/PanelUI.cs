@@ -315,5 +315,10 @@ namespace AvancedUI
          if(argDestroyObject)
             DestroyImmediate(gameObject);
       }
+
+      public static bool PanelExits()
+      {
+         return instance != null;
+      }
    }
 }
