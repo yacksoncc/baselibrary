@@ -10,7 +10,7 @@ namespace AvancedUI
    [RequireComponent(typeof(CanvasGroup))]
    public abstract class PanelUI<T> : MonoBehaviour where T : PanelUI<T>
    {
-      private static T instance;
+      protected static T instance;
 
       public static T Instance
       {
