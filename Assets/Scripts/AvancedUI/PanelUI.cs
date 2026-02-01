@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ScriptableEvents;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AvancedUI
@@ -21,7 +20,7 @@ namespace AvancedUI
                var tmpFoundInstance = FindInstanceInScene();
 
                if(tmpFoundInstance == null)
-                  Debug.LogWarning($"Panel UI with name: {typeof(T)} does not exist in scene, please setup.");
+                  Debug.LogWarning($"Panel UI con nombre: {typeof(T)} no existe en la escena, por favor configurar.");
                else
                   instance = tmpFoundInstance;
             }
@@ -46,7 +45,7 @@ namespace AvancedUI
       }
 
       [Header("Panel Animation")]
-      [SerializeField, Tooltip("Animation curves that control how the panel appears/disappears on screen")]
+      [SerializeField, Tooltip("Curvas de animación que controlan cómo aparece/desaparece el panel")]
       private SOAnimationsCurvePanelUI soAnimationsCurvePanelUI;
 
       private Vector3 initialScale;
@@ -68,10 +67,10 @@ namespace AvancedUI
       private Image backgroundImage;
 
       [Header("Scriptable Events")]
-      [SerializeField, Tooltip("Executed when panel completes showing")]
+      [SerializeField, Tooltip("Ejecutado cuando el panel termina de mostrarse")]
       private ScriptableEventEmpty seOnPanelShow;
 
-      [SerializeField, Tooltip("Executed when panel completes hiding")]
+      [SerializeField, Tooltip("Ejecutado cuando el panel termina de ocultarse")]
       private ScriptableEventEmpty seOnPanelHide;
 
       public ScriptableEventEmpty OnPanelShowEvent
@@ -90,7 +89,9 @@ namespace AvancedUI
          => rectTransform ??= GetComponent<RectTransform>();
 
       public bool IsOpen { get; private set; }
+      
       public bool IsClosing { get; private set; }
+      
       public bool IsOpening { get; private set; }
 
       private void InitializeComponents()
@@ -108,7 +109,7 @@ namespace AvancedUI
 
          if(argShow)
             StartShowAnimation();
-         else
+         else if(gameObject.activeInHierarchy)
             StartHideAnimation(argDestroyAfterHide);
       }
 
@@ -270,8 +271,8 @@ namespace AvancedUI
       {
          IsOpen = true;
 
-         var tmpCurrentAnimationTime = animationTimeProgress * soAnimationsCurvePanelUI.TiempoAparicion;
          var tmpTotalAnimationTime = soAnimationsCurvePanelUI.TiempoAparicion;
+         var tmpCurrentAnimationTime = animationTimeProgress * tmpTotalAnimationTime;
 
          while(tmpCurrentAnimationTime <= tmpTotalAnimationTime)
          {
@@ -282,7 +283,6 @@ namespace AvancedUI
             yield return null;
          }
 
-         // Ensure final state
          animationTimeProgress = 1f;
          UpdatePanelVisuals(animationTimeProgress, true);
 
@@ -295,11 +295,12 @@ namespace AvancedUI
          if(animationTimeProgress == 0f)
             animationTimeProgress = 1f;
 
-         var tmpCurrentAnimationTime = animationTimeProgress * soAnimationsCurvePanelUI.TiempoOcultacion;
+         var tmpTotalAnimationTime = soAnimationsCurvePanelUI.TiempoOcultacion;
+         var tmpCurrentAnimationTime = animationTimeProgress * tmpTotalAnimationTime;
 
          while(tmpCurrentAnimationTime >= 0f)
          {
-            animationTimeProgress = tmpCurrentAnimationTime / soAnimationsCurvePanelUI.TiempoOcultacion;
+            animationTimeProgress = tmpCurrentAnimationTime / tmpTotalAnimationTime;
             UpdatePanelVisuals(animationTimeProgress, false);
 
             tmpCurrentAnimationTime -= Time.deltaTime;
@@ -313,10 +314,10 @@ namespace AvancedUI
          DestroyBackground();
 
          if(argDestroyObject)
-            DestroyImmediate(gameObject);
+            Destroy(gameObject); // Cambiado a Destroy por seguridad en Runtime
       }
 
-      public static bool PanelExits()
+      public static bool PanelExists()
       {
          return instance != null;
       }
